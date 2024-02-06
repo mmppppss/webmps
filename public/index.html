@@ -3,9 +3,25 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
-		<title>examenes</title>
+		<title>mmppppss</title>
+		<link rel="shortcut icon" href="media/cookie1.webp" type="image/x-icon">
+		<script charset="utf-8">
+			var icon=document.getElementsByTagName("link")[0]
+			var sprites="media/cookie"	
+			var sw=1;
+			var a=()=>{
+				setTimeout(()=>{
+					icon.href=sprites+sw+".webp";
+					sw+=1;
+					if(sw>7) sw=1;
+					a()
+				}
+				,2000)
+			}
+			a();
+		</script>	
 	</head>
-	<body id="root">
-		
+	<body>
+		<div id="root"></div>
 	</body>
 </html>
