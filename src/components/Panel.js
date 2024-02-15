@@ -3,7 +3,7 @@ import Search from './search'
 export default function Panel(){
 	const [list, setList] = useState([]);
 	useEffect(() => {
-		fetch("http://localhost:3030/api.php/articles")
+		fetch("api.php/articles")
 			.then(response => response.json())
 			.then(data => {
 				setList(data)

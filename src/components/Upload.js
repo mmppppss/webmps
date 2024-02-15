@@ -12,7 +12,7 @@ export default function Upload() {
 		fd.append('file', file);
 		fd.append('title', title)
 		fetch(
-			'http://localhost:3030/api.php/upload',
+			'api.php/upload',
 			{
 				method:"POST",
 				body:fd
