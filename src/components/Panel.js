@@ -1,40 +1,70 @@
-import React from 'react'
+import React, { useState, useEffect }  from 'react'
+import Search from './search'
+export default function Panel(){
+	const [list, setList] = useState([]);
+	useEffect(() => {
+		fetch("http://localhost:3030/api.php/articles")
+			.then(response => response.json())
+			.then(data => {
+				setList(data)
+			})
+			.catch(error => {
+				console.error('Ha ocurrido un error:', error);
+			});
 
-export default class Panel extends React.Component{
-	constructor(props){
-		super(props);
+	},[]);	
+	function articles(categoria="null"){
+		let res=list.map(art =>{
+			if(art.categoria === categoria || (categoria==="null"&&(art.categoria!=="programacion" && art.categoria!=="hacking"))) return <li key={art.id}><span><a href={art.enlace}>{art.nombre}</a></span></li>
+			return null;
+		})
+		
+		return(res);	
 	}
-	toggleTree(e){
+	function toggleTree(e){
 		const parentLi = e.target.parentNode;
 		const childUl = parentLi.querySelector('ul');
 		if (childUl) {
 			childUl.hidden = !childUl.hidden;
 		}
 	};
-	render() {
-		return (	
-			<div className="panel" id="panel">
-				<div className="tree" onClick={this.toggleTree}>
-					<ul>
-						<li><span>/</span></li>
-						<ul>
-							<li><span><a href="/">index</a></span></li>
-							<li>
-								<span>Articulos/</span>
-								<ul>
-									<li><span>/</span>
-										<ul>
-											<li><span><a href="#">hey</a></span></li>
-											<li><span><a href="#">hey</a></span></li>
-											<li><span><button>aaaaaaaa</button></span></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</ul>	
-				</div>
+	return (	
+		<div className="panel" id="panel">
+			<Search/>
+			<div className="tree" >
+				<ul>
+					<li><span>/</span></li>
+					<ul onClick={toggleTree}>
+						<li><span><a href="/">index</a></span></li>
+						<li>
+							<span>Articulos/</span>
+							<ul>
+								<li><span>Prog</span>
+									<ul>
+										{articles("programacion")}
+									</ul>
+								</li>
+								<li><span>hack</span>
+									<ul>
+										{articles("hacking")}
+									</ul>
+								</li>
+								<li><span>otros</span>
+									<ul>
+										{articles()}
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</ul>
+				
 			</div>
-		);
-	}
+			<div className="footer">
+				<a href="https://github.com/mmppppss">GH</a>
+				<a href="https://facebook.com/mmppppss">FB</a>
+				<a href="https://ig.me/mmppppss">IG</a>
+			</div>
+		</div>
+	);
 }

@@ -1,5 +1,5 @@
 {
-  "name": "webexamenes",
+  "name": "webmps",
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+	"api":"php -S localhost:3030 -t ./api/",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
