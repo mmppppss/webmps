@@ -10,14 +10,7 @@ export default class App extends React.Component{
 			article:{},
 			route: window.location.href.split("/")[3]
 		};
-		/*fetch("http://localhost:3030/api.php/articles")
-			.then(response => response.json())
-			.then(data => {
-				this.state.list=data;
-			})
-			.catch(error => {
-				console.error('Ha ocurrido un error:', error);
-			});*/
+		console.log(this.state.route)
 	}
 	togglePanel(){
 		const panel = document.querySelector(".panel");
@@ -34,14 +27,15 @@ export default class App extends React.Component{
 		}
 	}
 	content(){
-		if(this.state.route!==""){
+		if(this.state.route=="login"){
+			return <Admin/>	
+		}else if(this.state.route!==""){
 			return(<Content enlace={this.state.route}/>)	
 		}else{
 			return(<div className="content">
 				<h1>hola</h1>
 				<span>hola</span>
 				<a href="/hola">null</a>
-				<Admin/>	
 				<h1>hola</h1>	
 				<h1>hola</h1>	
 			</div>)
