@@ -3,7 +3,7 @@ import Read from './Read'
 import Create from './Create'
 
 export default function Admin(){
-	const [route, setRoute] = useState(window.location.href.split("/")[4]);
+	const [route] = useState(window.location.href.split("/")[4]);
 	function generate(){
 		console.log(route)
 		if(route==="create"){

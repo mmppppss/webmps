@@ -3,7 +3,7 @@ import Search from './search'
 export default function Panel(){
 	const [list, setList] = useState([]);
 	useEffect(() => {
-		fetch("api.php/articles")
+		fetch("/api.php/articles")
 			.then(response => response.json())
 			.then(data => {
 				setList(data)
@@ -15,7 +15,7 @@ export default function Panel(){
 	},[]);	
 	function articles(categoria="null"){
 		let res=list.map(art =>{
-			if(art.categoria === categoria || (categoria==="null"&&(art.categoria!=="programacion" && art.categoria!=="hacking"))) return <li key={art.id}><span><a href={art.enlace}>{art.nombre}</a></span></li>
+			if(art.categoria === categoria || (categoria==="null"&&(art.categoria!=="programacion" && art.categoria!=="hacking"))) return <li key={art.id}><span><a href={"/"+art.enlace}>{art.nombre}</a></span></li>
 			return null;
 		})
 		

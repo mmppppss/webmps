@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 export default function Create(props){
 	const [text, setText] =  useState();
@@ -8,7 +8,7 @@ export default function Create(props){
 	const [link, setLink] = useState();
 	const [loaded, setLoaded] = useState(false);
 	if(props.link!=="" && props.link && !loaded){
-		fetch('http://localhost:3030/api.php?art='+props.link)
+		fetch('/api.php?art='+props.link)
 			.then(response=>response.json())
 			.then(data=>{
 				if(data==null) return
@@ -32,9 +32,9 @@ export default function Create(props){
 		FD.append("cat", cat);
 		FD.append("link", link);
 		if(props.link!=="" && props.link){
-			fetch('http://localhost:3030/api.php?del='+props.link)
+			fetch('/api.php?del='+props.link)
 		}
-		fetch("http://localhost:3030/api.php/create",{
+		fetch("/api.php/create",{
 			method:"POST",
 			body: FD
 		})

@@ -4,7 +4,7 @@ export default function Content(props) {
 	const [article, setArticle] = useState([]);
 	const [related, setRelated] = useState([]);
 	useEffect(()=>{
-		fetch("api.php/articles?enlace="+props.enlace)
+		fetch("/api.php/articles?enlace="+props.enlace)
 			.then(response => response.json())
 			.then(data => {
 				if(data)setArticle(data);
@@ -13,7 +13,7 @@ export default function Content(props) {
 			.catch(error => {
 				console.log("error")
 			});
-		fetch("api.php?rel="+props.enlace)
+		fetch("/api.php?rel="+props.enlace)
 			.then(response => response.json())
 			.then(data => {
 				if(data)setRelated(data);
