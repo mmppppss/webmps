@@ -1,13 +1,26 @@
-import React from 'react'
+import React, {useState} from 'react'
+import Read from './Read'
+import Create from './Create'
 
 export default function Admin(){
+	const [route, setRoute] = useState(window.location.href.split("/")[4]);
+	function generate(){
+		console.log(route)
+		if(route==="create"){
+			return <Create/>
+		}else if(route==="read"){
+			return <Read/>
+		}else if(route==="update"){
+			return <Create link={window.location.href.split("/")[4]}/>
+		}else if(route===""){
+			return <p><a href="create">create</a><a href="read">Read</a></p>
+		}else if(route!=="read" || route!=="create"){
+			return <Read link={route}/>
+		}
+	}
 	return(
 		<div>
-			<form className="login" method="POST" action="http://localhost:3030/api.php/login">
-				<label>USERNAME:</label><input type="text"  name="user" placeholder="username" />	
-				<label>PASSWORD:</label><input type="password" name="pass" placeholder="*********"/>	
-				<input type="submit" value="  Login  "/>	
-			</form>
+			{generate()}
 		</div>
 	)
 }

@@ -27,7 +27,7 @@ export default class App extends React.Component{
 		}
 	}
 	content(){
-		if(this.state.route=="login"){
+		if(this.state.route=="admin"){
 			return <Admin/>	
 		}else if(this.state.route!==""){
 			return(<Content enlace={this.state.route}/>)	
