@@ -35,7 +35,7 @@ export default function Content(props) {
 			<div className="suggest">
 				<h3>Articulos relacionados</h3>
 				{related.map(k=>{
-					return <li>{k.nombre}</li>
+					return <li key={k.enlace}>{k.nombre}</li>
 				})}	
 			</div>
 			</div>
