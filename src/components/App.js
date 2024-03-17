@@ -1,8 +1,8 @@
 import React from 'react'
 import Menu from './menu'
 import Panel from "./Panel"
-import Admin from './Admin' 
 import Content from './Content'
+import Suggest from './Suggest'
 export default class App extends React.Component{
 	constructor(props) {
 		super(props);
@@ -10,7 +10,6 @@ export default class App extends React.Component{
 			article:{},
 			route: window.location.href.split("/")[3]
 		};
-		console.log(this.state.route)
 	}
 	togglePanel(){
 		const panel = document.querySelector(".panel");
@@ -26,19 +25,17 @@ export default class App extends React.Component{
 			more.innerText = "-";
 		}
 	}
-	content(){
-		if(this.state.route=="admin"){
-			return <Admin/>	
-		}else if(this.state.route!==""){
+		content(){
+		if(this.state.route!==""){
 			return(<Content enlace={this.state.route}/>)	
 		}else{
-			return(<div className="content">
-				<h1>hola</h1>
-				<span>hola</span>
-				<a href="/hola">null</a>
-				<h1>hola</h1>	
-				<h1>hola</h1>	
-			</div>)
+			return(
+				<div className="content">
+				<h1> Bienvenido </h1>
+				<p> Aqui encontraras algunos de los articulos mas recientes</p>
+				<Suggest/>
+				</div>
+			)
 		}
 	}
 	render() {

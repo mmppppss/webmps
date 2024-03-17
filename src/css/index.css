@@ -190,3 +190,13 @@ form>input{
 .footer>*{
 	margin: 10px;
 }
+.suggestArts{
+	display: flex;
+	width: 100%;
+}
+.related{
+	margin: 5px;
+	text-align: center;
+	border: 3px solid var(--color-dark3);
+	width: 25%;
+}
