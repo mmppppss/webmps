@@ -5,13 +5,13 @@ export default function  Read(props){
 	const [art, setArt] = useState();
 	useEffect(() => {
 		if(!props.link){
-			fetch('http://localhost:3030/api.php/articles')
+			fetch('/api.php/articles')
 			.then(response=>response.json())
 			.then(data=>{
 				setList(data);
 			})
 		}else{
-			fetch('http://localhost:3030/api.php?art='+props.link)
+			fetch('/api.php?art='+props.link)
 			.then(response=>response.json())
 			.then(data=>{
 				setArt(data);
@@ -19,7 +19,7 @@ export default function  Read(props){
 		}
 	},[]);
 	function del(link){
-		fetch('http://localhost:3030/api.php?del='+link)
+		fetch('/api.php?del='+link)
 	}
 	function generate(){
 		let res;
@@ -35,9 +35,9 @@ export default function  Read(props){
 		}else if(art){
 			res=(
 				<div>
-					<h1>{art.title}</h1>
-					<span>by: {art.author}</span>
-					<p>{art.content}</p>
+					<h1>{art.nombre}</h1>
+					<span>by: {art.autor}</span>
+					<p>{art.contenido}</p>
 				</div>
 			)
 		}

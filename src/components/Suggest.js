@@ -3,13 +3,13 @@ import React, {useState, useEffect} from 'react'
 export default function Suggest(){
 	const [related, setRelated] = useState([]);
 	useEffect(()=>{
-		fetch("http://localhost:3030/api.php?rel="+window.location.pathname.slice(1))
+		fetch("/api.php?rel="+window.location.pathname.slice(1))
 			.then(response => response.json())
 			.then(data => {
 				if(data)setRelated(data);
 			})
 			.catch(error => {
-				fetch("http://localhost:3030/api.php?rel=")
+				fetch("/api.php?rel=")
 				.then(response => response.json())
 				.then(data => {
 					if(data)setRelated(data);
