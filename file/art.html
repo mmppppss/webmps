@@ -1,0 +1,7 @@
+Para este algoritmo primero identificamos lo necesario
+para empezar las piezas, que son un conjunto de 4 cuadros unidos por las aristas
+Desde mi punto de vista la manera mas sencilla de generar las piezas es en un matriz vacia de 7x7 con una "semilla" que sera la posicion [3,3] asi nuestra piesa generada podra crecer 3 cuadros para cualquier direccion sin quedarse sin espacio.
+En dicha matriz teniendo la semilla en la posicion [3,3] le asignaremos numeros del 1 al 4 a las posiciones arriba, abajo, izquierda y derecha.
+una vez hecho esto generemos un numero aleatorio del 1 al 4 y lo usamos para generar un cuadro, ademas deplazamos las posicion en un cuadro que es el que ya tenemos creado.
+Repetimos eso 3 veces +1 que es la semilla y obtenemos la pieza del tetris con 4 cuadros unidos por las aristas.
+

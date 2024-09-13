@@ -25,10 +25,9 @@ export default class App extends React.Component{
 			more.innerText = "-";
 		}
 	}
-		content(){
-		if(this.state.route!==""){
-			return(<Content enlace={this.state.route}/>)	
-		}else{
+	content(){
+		console.log(this.state.route);	
+		if(this.state.route==="" || this.state.route===null || this.state.route==="?i=1"){
 			return(
 				<div className="content">
 				<h1> Bienvenido </h1>
@@ -36,6 +35,8 @@ export default class App extends React.Component{
 				<Suggest/>
 				</div>
 			)
+		}else if(this.state.route!==""){
+			return(<Content enlace={this.state.route}/>)
 		}
 	}
 	render() {
