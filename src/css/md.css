@@ -1,0 +1,106 @@
+.markdown-body {
+  background-color: var(--color-dark);
+  color: var(--color-font);
+  font-family: inherit;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+.markdown-body a {
+  color: var(--color-emphasis);
+  text-decoration: none;
+}
+
+.markdown-body a:hover {
+  color: var(--color-emphasis2);
+}
+
+.markdown-body h1, 
+.markdown-body h2, 
+.markdown-body h3, 
+.markdown-body h4 {
+  color: var(--color-font2);
+  border-bottom: 1px solid var(--color-dark3);
+  padding-bottom: 5px;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+}
+
+.markdown-body h2 {
+  font-size: 1.75em;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body p {
+  margin-bottom: 1em;
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid var(--color-emphasis);
+  padding: 10px;
+  background-color: var(--color-dark2);
+  color: var(--color-font3);
+  margin: 10px 0;
+}
+
+.markdown-body code {
+  background: var(--color-dark2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+  color: var(--color-emphasis);
+}
+
+.markdown-body pre {
+  background-color: var(--color-dark3);
+  color: var(--color-font2);
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+.markdown-body ul, 
+.markdown-body ol {
+  padding-left: 20px;
+}
+
+.markdown-body li {
+  margin-bottom: 5px;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.markdown-body th, 
+.markdown-body td {
+  padding: 10px;
+  border: 1px solid var(--color-dark3);
+}
+
+.markdown-body th {
+  background-color: var(--color-dark2);
+  color: var(--color-font2);
+  font-weight: bold;
+}
+
+.markdown-body tbody tr:nth-child(odd) {
+  background-color: var(--color-dark2);
+}

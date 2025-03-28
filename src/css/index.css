@@ -190,3 +190,103 @@ form>input{
 .footer>*{
 	margin: 10px;
 }
+
+
+
+/* Contenedor principal */
+.article-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--color-dark3);
+  max-width: 900px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del artículo */
+.title {
+  font-size: 2.5em;
+  color: var(--color-font2);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Autor del artículo */
+.author {
+  font-size: 1.2em;
+  color: var(--color-font3);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.author span {
+  font-weight: bold;
+}
+
+
+/* Contenedor de botones de compartir */
+.share-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Enlaces de compartir */
+.share-link {
+  display: inline-block;
+  background-color: var(--color-emphasis);
+  color: var(--color-dark3);
+  padding: 12px 20px;
+  border-radius: 4px;
+  text-align: center;
+  width: fit-content;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.share-link:hover {
+  background-color: var(--color-emphasis2);
+  transform: translateY(-3px);
+}
+
+/* Artículos relacionados */
+.suggest {
+  background-color: var(--color-dark2);
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 8px;
+}
+
+.suggest h3 {
+  color: var(--color-font2);
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.suggest ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.relatedCard {
+  padding: 10px;
+  color: var(--color-font3);
+  font-size: 1.1em;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-dark3);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.relatedCard:hover {
+  background-color: var(--color-dark3);
+  transform: translateX(5px);
+  color: var(--color-emphasis);
+}
+
+.relatedCard:last-child {
+  border-bottom: none;
+}

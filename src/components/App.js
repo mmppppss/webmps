@@ -8,7 +8,7 @@ export default class App extends React.Component{
 		super(props);
 		this.state = {
 			article:{},
-			route: window.location.href.split("/")[3]
+			route: window.location.href.split("/")[3].replace("?i=1",""),
 		};
 		console.log(this.state.route)
 	}
