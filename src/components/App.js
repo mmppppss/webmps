@@ -1,7 +1,6 @@
 import React from 'react'
 import Menu from './menu'
 import Panel from "./Panel"
-import Admin from './Admin' 
 import Content from './Content'
 export default class App extends React.Component{
 	constructor(props) {
@@ -27,9 +26,7 @@ export default class App extends React.Component{
 		}
 	}
 	content(){
-		if(this.state.route==="admin"){
-			return <Admin/>	
-		}else if(this.state.route!==""){
+		if(this.state.route!==""){
 			return(<Content enlace={this.state.route}/>)	
 		}else{
 			return(<div className="content">
