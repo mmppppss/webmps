@@ -25,7 +25,7 @@ export default function Login() {
 
 			if (res.ok) {
 				alert('Login correcto')
-				window.location.href = '/';
+				window.location.href = '/panel';
 			} else {
 				setError(data.error || 'Error de autenticación')
 			}

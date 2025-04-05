@@ -16,7 +16,7 @@ export  function CreateArticle({ articleId }) {
 	useEffect(() => {
 		const fetchArticle = async () => {
 			if (articleId) {
-				const response = await fetch(`${api}/art/${articleId}`);
+				const response = await fetch(`${api}/art/id/${articleId}`);
 				if (response.ok) {
 					const article = await response.json();
 					setFormData({
@@ -49,34 +49,16 @@ export  function CreateArticle({ articleId }) {
 	};
 
 
-	  const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		const method = articleId ? 'PUT' : 'POST';
-		const url = articleId ? `${api}/art/${articleId}` : `${api}/art/create`;
-
-		const response = await fetch(url, {
-		  method: method,
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		  credentials: 'include',
-		  body: JSON.stringify(formData),
-		});
-
-		if (response.ok) {
-		  alert(articleId ? 'Artículo actualizado con éxito' : 'Artículo creado con éxito');
-		} else {
-		  alert('Hubo un error al procesar el artículo');
-		}
-	  };
-/*
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch(`${api}/art/create`, {
+		const method = articleId ? 'PUT' : 'POST';
+		const url = articleId ? `${api}/art/update/${articleId}` : `${api}/art/create`;
+
+		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
+				'X-HTTP-Method-Override': method,
 				'Content-Type': 'application/json',
 			},
 			credentials: 'include',
@@ -84,16 +66,17 @@ export  function CreateArticle({ articleId }) {
 		});
 
 		if (response.ok) {
-			alert('Artículo creado con éxito');
+			alert(articleId ? 'Artículo actualizado con éxito' : 'Artículo creado con éxito');
 		} else {
-			alert('Hubo un error al crear el artículo');
+			alert('Hubo un error al procesar el artículo');
 		}
-	};*/
+	};
+
 	return (
 <div className="container mx-auto  max-w-full p-4 ">
   <div className="flex justify-between mb-10">
   <h1 className="text-3xl max-w-full text-center font-bold mb-4">{articleId ? 'Editar artículo' : 'Crear nuevo artículo'}</h1>
-  <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => window.location.href = '/'}>Dashboard</button>
+  <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => window.location.href = '/panel/'}>Dashboard</button>
   </div>
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
     {/* Formulario */}

@@ -1,4 +1,4 @@
-export default function ArticleCard({ article, onDelete }) {
+export default function ArticleCard({ article, onDelete, onEdit }) {
     const { id, titulo, categoria, fecha, enlace } = article;
 
     return (
@@ -10,13 +10,13 @@ export default function ArticleCard({ article, onDelete }) {
                 </div>
                 <div className="flex gap-2">
                     <button
-                        onClick={() => window.location.href = `/art${enlace}`}
+                        onClick={() => window.location.href = `/${enlace}`}
                         className="bg-blue-500 text-white px-3 py-1 rounded"
                     >
                         Ver
                     </button>
                     <button
-                        onClick={() => window.location.href = `/edit/${id}`}
+                        onClick={() => onEdit(id)}
                         className="bg-yellow-500 text-white px-3 py-1 rounded"
                     >
                         Editar

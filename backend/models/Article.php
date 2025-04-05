@@ -7,13 +7,13 @@ class Article {
     }
 
     public function getAll() {
-        $query = "SELECT * FROM articulos ORDER BY id DESC";
+        $query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id ORDER BY id DESC";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getByLink($link) {
-        $query = "SELECT * FROM articulos WHERE enlace = :link LIMIT 1";
+        $query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id WHERE enlace = :link LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':link', $link);
         $stmt->execute();
@@ -21,7 +21,7 @@ class Article {
 	}
 
     public function getById($id) {
-        $query = "SELECT * FROM articulos WHERE id = :id LIMIT 1";
+        $query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id WHERE articulos.id = :id LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

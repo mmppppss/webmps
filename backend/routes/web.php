@@ -9,6 +9,7 @@ $auth = new AuthController($db);
 $articleController = new ArticleController($db);
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = str_replace('/api/public/index.php', '', $uri);
 $method = $_SERVER['REQUEST_METHOD'];
 
 
@@ -50,12 +51,12 @@ if ($uri =='/art/' && $method === 'GET' && isset($_GET['enlace'])) {
 	exit;
 }
 if(preg_match('#^/art/([^/]+)$#', $uri, $matches) && $method === 'GET'){
-	$link = "/".$matches[1];
+	$link = $matches[1];
 	$articleController->show($link);
 	exit;
 }
 
-if (preg_match('#^/art/(\d+)$#', $uri, $matches) && $method === 'GET') {
+if (preg_match('#^/art/id/(\d+)$#', $uri, $matches) && $method === 'GET') {
     $id = $matches[1]; 
     $articleController->showById($id);
     exit;
@@ -78,13 +79,13 @@ if ($uri === '/art/create' && $method === 'POST') {
 }
 
 
-if (preg_match('#^/art/(\d+)$#', $uri, $matches) && $method === 'PUT') {
+if (preg_match('#^/art/update/(\d+)$#', $uri, $matches) && $method === 'POST') {
     $id = $matches[1];
     $articleController->update($id);
     exit;
 }
 
-if (preg_match('#^/art/(\d+)$#', $uri, $matches) && $method === 'DELETE') {
+if (preg_match('#^/art/delete/(\d+)$#', $uri, $matches) && $method === 'POST') {
 	requireAuth();
 	$id = $matches[1];
 	$articleController->delete($id);
