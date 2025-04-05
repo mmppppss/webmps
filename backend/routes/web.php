@@ -44,8 +44,13 @@ if ($uri === '/arts' && $method === 'GET') {
     exit;
 }
 
-if ($uri === '/art/' && $method === 'GET' && isset($_GET['enlace'])) {
-    $link = $_GET['link'];
+if ($uri =='/art/' && $method === 'GET' && isset($_GET['enlace'])) {
+    $link = $_GET['enlace'];
+	$articleController->show($link);
+	exit;
+}
+if(preg_match('#^/art/([^/]+)$#', $uri, $matches) && $method === 'GET'){
+	$link = "/".$matches[1];
 	$articleController->show($link);
 	exit;
 }
@@ -90,5 +95,5 @@ http_response_code(404);
 echo json_encode([
     "status" => "error",
 	"message" => "Ruta no encontrada o petición no válida",
-	"uri" => $uri
+	"uri" => $uri.$_GET["enlace"].$method
 ]);
