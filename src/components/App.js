@@ -30,8 +30,7 @@ export default class App extends React.Component{
 			return(<Content enlace={this.state.route}/>)	
 		}else{
 			return(<div className="content">
-				<h1> Hola mundo, este es mi sitio web.</h1>
-				<a href="admin">Admin</a>
+
 			</div>)
 		}
 	}

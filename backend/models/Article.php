@@ -28,6 +28,33 @@ class Article {
         return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
+
+
+public function getRelated($link) {
+    $art = $this->getById($link);
+
+    $query = "SELECT titulo, enlace, descripcion 
+              FROM articulos 
+              WHERE (titulo LIKE :search1 OR descripcion LIKE :search2 OR categoria LIKE :search3 OR enlace LIKE :search4 ) 
+              AND enlace != :link
+              LIMIT 4";
+
+    $stmt = $this->db->prepare($query);
+    $searchTerm = '%' . $art['titulo'] . '%';  // Usamos el título como término de búsqueda
+    $stmt->bindParam(':search1', $searchTerm);
+    $stmt->bindParam(':search2', $searchTerm);
+    $stmt->bindParam(':search3', $searchTerm);
+    $stmt->bindParam(':search4', $searchTerm);
+    $stmt->bindParam(':link', $link);
+
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    return $results;
+}
+
+
 	public function create($title, $content, $link,$category, $description){
 		$query = "INSERT INTO articulos (titulo, autor_id, contenido, categoria ,enlace, descripcion) VALUES (:title, :author, :content, :categoria, :link, :description)";
 		$stmt = $this->db->prepare($query);

@@ -91,6 +91,13 @@ if (preg_match('#^/art/delete/(\d+)$#', $uri, $matches) && $method === 'POST') {
 	$articleController->delete($id);
 	exit;
 }
+if (preg_match('#^/art/rel/([^/]+)$#', $uri, $matches) && $method === 'GET') {
+    $id = $matches[1];
+    $articleController->related($id);
+    exit;
+}
+
+
 
 http_response_code(404);
 echo json_encode([

@@ -1,11 +1,14 @@
 import {React, useState, useEffect}  from 'react'
 import ReactMarkdown from 'react-markdown'
 import "../css/md.css"
+
+
+const api = process.env.REACT_APP_API_URL;
 export default function Content(props) {
 	const [article, setArticle] = useState([]);
 	const [related, setRelated] = useState([]);
 	useEffect(()=>{
-		fetch("/api.php/articles?enlace="+props.enlace)
+		fetch(`${api}/art/${props.enlace}`)
 			.then(response => response.json())
 			.then(data => {
 				if(data)setArticle(data);
@@ -14,7 +17,7 @@ export default function Content(props) {
 			.catch(error => {
 				console.log("error")
 			});
-		fetch("/api.php?rel="+props.enlace)
+		fetch(`${api}/art/rel/${props.enlace}`)
 			.then(response => response.json())
 			.then(data => {
 				if(data)setRelated(data);
@@ -94,19 +97,36 @@ export default function Content(props) {
 	function generate(){
 		const textoRenderizado = { __html: article.contenido };
 		let res=(<div>
-			<h1 className="title">{article.nombre}</h1>
-			<h2 className="author">by: {article.autor}</h2>
+			<h1 className="title">{article.titulo}</h1>
+			<h2 className="author">by: {article.author}</h2>
+			<div class="info">
+				<span>VISTAS: {article.vistas} </span><span className='separator'> | </span>
+				<span>CATEGORIA: {article.categoria} </span> <span className='separator'> | </span>
+				<span> {article.fecha} </span>
+			</div>
 			<div className="markdown-body">
 				<ReactMarkdown>{article.contenido}</ReactMarkdown>
 			</div>
 			{share()}
+			{related.length >= 0 ? 
+		
 			<div className="suggest">
-				<h3>Articulos relacionados</h3>
-				{related.map(k=>{
-					if(k.enlace===article.enlace) return null
-					return <li key={k.enlace} className="relatedCard"><a href={k.enlace}>{k.nombre}</a></li>
-				})}	
+			  <h3>Artículos Recomendados</h3>
+			  <div className="related-cards">
+				{related.map(k => {
+				  if (k.enlace === article.enlace) return null; // No mostrar el artículo actual
+				  return (
+					<div key={k.enlace} className="relatedCard">
+					  <a href={`/${k.enlace}`} className="card-link">
+						<h4>{k.titulo}</h4>
+						<p>{k.descripcion}</p>
+					  </a>
+					</div>
+				  );
+				})}
+			  </div>
 			</div>
+			: <span></span>}
 			</div>
 		)
 		return (res);

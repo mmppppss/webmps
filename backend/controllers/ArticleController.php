@@ -46,4 +46,9 @@ class ArticleController {
 		$description = $data['descripcion'] ?? '';
 		$this->model->update($id, $title, $content, $link, $category, $description);
 	}
+	public function related($link) {
+		$articles = $this->model->getRelated($link);
+		echo json_encode($articles);
+	}
+	
 }

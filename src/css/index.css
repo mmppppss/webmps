@@ -195,98 +195,130 @@ form>input{
 
 /* Contenedor principal */
 .article-container {
-  margin: 20px auto;
-  padding: 20px;
-  background-color: var(--color-dark3);
-  max-width: 900px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--color-dark3);
+	max-width: 900px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Título del artículo */
 .title {
-  font-size: 2.5em;
-  color: var(--color-font2);
-  text-align: center;
-  margin-bottom: 10px;
+	font-size: 2.5em;
+	color: var(--color-font2);
+	text-align: center;
+	margin-bottom: 10px;
 }
 
 /* Autor del artículo */
 .author {
-  font-size: 1.2em;
-  color: var(--color-font3);
-  text-align: center;
-  margin-bottom: 20px;
+	font-size: 1.2em;
+	color: var(--color-font3);
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .author span {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 
 /* Contenedor de botones de compartir */
 .share-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  flex-wrap: wrap;
+	display: flex;
+	justify-content: space-around;
+	margin-top: 20px;
+	flex-wrap: wrap;
 }
 
 /* Enlaces de compartir */
 .share-link {
-  display: inline-block;
-  background-color: var(--color-emphasis);
-  color: var(--color-dark3);
-  padding: 12px 20px;
-  border-radius: 4px;
-  text-align: center;
-  width: fit-content;
-  font-size: 1.1em;
-  font-weight: bold;
-  margin: 10px;
-  transition: background-color 0.3s, transform 0.2s;
+	display: inline-block;
+	background-color: var(--color-emphasis);
+	color: var(--color-dark3);
+	padding: 7px 20px;
+	border-radius: 4px;
+	text-align: center;
+	width: fit-content;
+	font-size: 0.9em;
+	font-weight: bold;
+	margin: 10px;
+	transition: background-color 0.3s, transform 0.2s;
 }
 
 .share-link:hover {
-  background-color: var(--color-emphasis2);
-  transform: translateY(-3px);
+	background-color: var(--color-emphasis2);
+	transform: translateY(-3px);
 }
 
 /* Artículos relacionados */
-.suggest {
-  background-color: var(--color-dark2);
-  padding: 20px;
-  margin-top: 30px;
-  border-radius: 8px;
-}
 
-.suggest h3 {
-  color: var(--color-font2);
-  font-size: 1.5em;
-  margin-bottom: 15px;
-}
-
-.suggest ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.related-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .relatedCard {
-  padding: 10px;
-  color: var(--color-font3);
-  font-size: 1.1em;
+  width: 160px; /* Reducir tamaño de las tarjetas */
+  padding: 12px;
+  background-color: var(--color-dark2); /* Color de fondo de las tarjetas */
+  border-radius: 8px; /* Bordes redondeados */
+  color: var(--color-font3); /* Color de texto */
+  font-size: 0.9em; /* Reducir tamaño de fuente */
   cursor: pointer;
-  border-bottom: 1px solid var(--color-dark3);
-  transition: background-color 0.3s, transform 0.2s;
+  border: 1px solid var(--color-dark3); /* Borde con color oscuro */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para las tarjetas */
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s ease-in-out;
+}
+
+.relatedCard h4 {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--color-font); /* Título con color claro */
+  margin-bottom: 8px;
+}
+
+.relatedCard p {
+  font-size: 0.9em;
+  color: var(--color-font3); /* Descripción con color claro */
+  line-height: 1.4;
+  margin-bottom: 10px;
 }
 
 .relatedCard:hover {
-  background-color: var(--color-dark3);
+  background-color: var(--color-dark3); /* Fondo oscuro al hacer hover */
   transform: translateX(5px);
-  color: var(--color-emphasis);
+  color: var(--color-emphasis); /* Texto con color énfasis */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más intensa al hacer hover */
 }
 
 .relatedCard:last-child {
   border-bottom: none;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+
+
+.info{
+	margin:auto;
+	width: fit-content;
+	color: var(--color-font3);
+	font-size: 0.8em;
+	display: flex;
+}
+.info span{
+	margin-right: 10px;
+	margin-left: 10px;
+}
+.info .separator{
+	color: var(--color-emphasis);
 }

@@ -1,9 +1,11 @@
 import React, { useState, useEffect }  from 'react'
 import Search from './search'
+
+const api = process.env.REACT_APP_API_URL;
 export default function Panel(){
 	const [list, setList] = useState([]);
 	useEffect(() => {
-		fetch("/api.php/articles")
+		fetch(`${api}/arts`)
 			.then(response => response.json())
 			.then(data => {
 				setList(data)
@@ -13,14 +15,7 @@ export default function Panel(){
 			});
 
 	},[]);	
-	function articles(categoria="null"){
-		let res=list.map(art =>{
-			if(art.categoria === categoria || (categoria==="null"&&(art.categoria!=="programacion" && art.categoria!=="hacking"))) return <li key={art.id}><span><a href={"/"+art.enlace}>{art.nombre}</a></span></li>
-			return null;
-		})
-		
-		return(res);	
-	}
+
 	function toggleTree(e){
 		const parentLi = e.target.parentNode;
 		const childUl = parentLi.querySelector('ul');
@@ -28,6 +23,29 @@ export default function Panel(){
 			childUl.hidden = !childUl.hidden;
 		}
 	};
+
+	function groupArticlesByCategory() {
+	  const categories = Array.from(new Set(list.map(art => art.categoria))).sort();
+
+	  const groupedArticles = categories.map(category => {
+		const articlesInCategory = list.filter(art => art.categoria === category);
+
+		return (
+		  <li key={category}>
+			<span>{category}</span>
+			<ul>
+			  {articlesInCategory.map(art => (
+				<li key={art.id}>
+				  <span><a href={"/" + art.enlace}>{art.titulo}</a></span>
+				</li>
+			  ))}
+			</ul>
+		  </li>
+		);
+	  });
+
+	  return groupedArticles;
+	}
 	return (	
 		<div className="panel" id="panel">
 			<Search/>
@@ -39,23 +57,10 @@ export default function Panel(){
 						<li>
 							<span>Articulos/</span>
 							<ul>
-								<li><span>Prog</span>
-									<ul>
-										{articles("programacion")}
-									</ul>
-								</li>
-								<li><span>hack</span>
-									<ul>
-										{articles("hacking")}
-									</ul>
-								</li>
-								<li><span>otros</span>
-									<ul>
-										{articles()}
-									</ul>
-								</li>
+								{groupArticlesByCategory()}
 							</ul>
 						</li>
+
 					</ul>
 				</ul>
 				
