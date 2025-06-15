@@ -185,10 +185,9 @@ form>input{
 }
 .footer{
 	justify-content: center;
-	display: flex;
 }
 .footer>*{
-	margin: 10px;
+	margin-top: 10px;
 }
 
 

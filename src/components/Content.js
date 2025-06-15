@@ -1,5 +1,6 @@
 import {React, useState, useEffect}  from 'react'
 import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
 import "../css/md.css"
 
 
@@ -8,6 +9,7 @@ export default function Content(props) {
 	const [article, setArticle] = useState([]);
 	const [related, setRelated] = useState([]);
 	useEffect(()=>{
+	    console.log("Fetching artículo:", props.enlace);
 		fetch(`${api}/art/${props.enlace}`)
 			.then(response => response.json())
 			.then(data => {
@@ -25,9 +27,7 @@ export default function Content(props) {
 			.catch(error => {
 				console.log("error")
 			});
-
-// eslint-disable-next-line
-	},[]);
+	},[props.enlace]);
 	function share(){
 		return(
 			<div className="share-buttons">
@@ -95,17 +95,16 @@ export default function Content(props) {
 	}
 
 	function generate(){
-		const textoRenderizado = { __html: article.contenido };
 		let res=(<div>
 			<h1 className="title">{article.titulo}</h1>
 			<h2 className="author">by: {article.author}</h2>
-			<div class="info">
+			<div className="info">
 				<span>VISTAS: {article.vistas} </span><span className='separator'> | </span>
 				<span>CATEGORIA: {article.categoria} </span> <span className='separator'> | </span>
 				<span> {article.fecha} </span>
 			</div>
 			<div className="markdown-body">
-				<ReactMarkdown>{article.contenido}</ReactMarkdown>
+				<ReactMarkdown remarkPlugins={[gfm]}>{article.contenido}</ReactMarkdown>
 			</div>
 			{share()}
 			{related.length >= 0 ? 

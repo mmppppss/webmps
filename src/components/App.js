@@ -2,6 +2,8 @@ import React from 'react'
 import Menu from './menu'
 import Panel from "./Panel"
 import Content from './Content'
+import Rel from './Rel'
+import Footer from './Footer'
 export default class App extends React.Component{
 	constructor(props) {
 		super(props);
@@ -30,7 +32,7 @@ export default class App extends React.Component{
 			return(<Content enlace={this.state.route}/>)	
 		}else{
 			return(<div className="content">
-
+				<Rel />
 			</div>)
 		}
 	}
@@ -40,7 +42,8 @@ export default class App extends React.Component{
 				<Menu togglePanel={this.togglePanel}/>
 				<Panel list={this.state.list}/>	
 				<div className="void" onClick={this.togglePanel}>esto es un bloque vacio que ni se muestra pero tiene uso, hola</div>
-				{this.content()}	
+				{this.content()}
+				<Footer />
 			</div>
 		);
 	}

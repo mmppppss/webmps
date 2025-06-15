@@ -12,12 +12,19 @@ class Article {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getByLink($link) {
+    public function getByLink($link, $countView = true) {
         $query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id WHERE enlace = :link LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':link', $link);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+		$stmt->execute();
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+		if($results && $countView){
+			$upQuery = "UPDATE articulos SET vistas = vistas + 1 WHERE enlace = :link";
+			$upstmt = $this->db->prepare($upQuery);
+			$upstmt->bindParam(':link', $link);
+			$upstmt->execute();
+		}
+		return $results;
 	}
 
     public function getById($id) {
@@ -30,29 +37,29 @@ class Article {
 
 
 
-public function getRelated($link) {
-    $art = $this->getById($link);
+	public function getRelated($link) {
+		$art = $this->getByLink($link, false);
 
-    $query = "SELECT titulo, enlace, descripcion 
-              FROM articulos 
-              WHERE (titulo LIKE :search1 OR descripcion LIKE :search2 OR categoria LIKE :search3 OR enlace LIKE :search4 ) 
-              AND enlace != :link
-              LIMIT 4";
+		$query = "SELECT titulo, enlace, descripcion 
+				  FROM articulos 
+				  WHERE (titulo LIKE :search1 OR descripcion LIKE :search2 OR categoria LIKE :search3 OR enlace LIKE :search4 ) 
+				  AND enlace != :link
+				  LIMIT 4";
 
-    $stmt = $this->db->prepare($query);
-    $searchTerm = '%' . $art['titulo'] . '%';  // Usamos el título como término de búsqueda
-    $stmt->bindParam(':search1', $searchTerm);
-    $stmt->bindParam(':search2', $searchTerm);
-    $stmt->bindParam(':search3', $searchTerm);
-    $stmt->bindParam(':search4', $searchTerm);
-    $stmt->bindParam(':link', $link);
+		$stmt = $this->db->prepare($query);
+		$searchTerm = '%' . $art['titulo'] . '%';  // Usamos el título como término de búsqueda
+		$stmt->bindParam(':search1', $searchTerm);
+		$stmt->bindParam(':search2', $searchTerm);
+		$stmt->bindParam(':search3', $searchTerm);
+		$stmt->bindParam(':search4', $searchTerm);
+		$stmt->bindParam(':link', $link);
 
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$stmt->execute();
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-    return $results;
-}
+		return $results;
+	}
 
 
 	public function create($title, $content, $link,$category, $description){
