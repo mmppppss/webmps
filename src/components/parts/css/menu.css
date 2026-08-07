@@ -1,0 +1,70 @@
+.menu {
+    background-color: var(--color-dark3);
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    position: relative;
+}
+
+.showPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.more {
+	display: inline-block;
+	cursor: pointer;
+	width: 30px;
+	height: 24px;
+	position: relative;
+	z-index: 3;
+}
+
+.bar {
+	display: block;
+	height: 4px;
+	width: 100%;
+	background-color: black;
+	border-radius: 2px;
+	margin: 4px 0;
+	transition: transform 0.4s ease, opacity 0.3s ease;
+	transform-origin: center;
+}
+
+/* Estado abierto: animar a X */
+.more.open .bar:nth-child(1) {
+	transform: rotate(45deg) translate(6px, 5px);
+}
+
+.more.open .bar:nth-child(2) {
+	opacity: 0;
+}
+
+.more.open .bar:nth-child(3) {
+	transform: rotate(-45deg) translate(6px, -5px);
+}
+
+
+
+.logo-container {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	justify-content: center;
+	flex: 1;
+}
+
+.logo-image {
+	width: 48px;
+	height: 48px;
+	object-fit: contain;
+	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+}
+
+.logo-title {
+	font-size: 2rem;
+	color: var(--color-font);
+	font-family: "Computer Modern Typewriter", monospace;
+	letter-spacing: 1px;
+	margin: 0;
+}

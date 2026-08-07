@@ -1,0 +1,183 @@
+/* Contenedor de comentarios */
+.comments {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: var(--color-dark2);
+    border-radius: 8px;
+}
+
+.comments h2 {
+    color: var(--color-font3);
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
+}
+
+/* Lista de comentarios */
+.comments-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.3rem;
+}
+
+/* Cada comentario */
+.comment-card {
+    background-color: var(--color-dark3);
+    padding: 0.6rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--color-font2);
+}
+
+.comment-card h3 {
+    margin: 0 0 0.2rem 0;
+    font-size: 0.95rem;
+    color: var(--color-emphasis);
+    font-weight: normal;
+}
+
+.comment-card p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Scrollbar opcional */
+.comments-cards::-webkit-scrollbar {
+    width: 6px;
+}
+.comments-cards::-webkit-scrollbar-thumb {
+    background-color: var(--color-font3);
+    border-radius: 3px;
+}
+.comments-cards::-webkit-scrollbar-track {
+    background: var(--color-dark2);
+}
+
+.comments-empty {
+    font-size: 0.85rem;
+    color: var(--color-font2);
+    opacity: 0.7;
+    margin-bottom: 0.8rem;
+}
+
+/* Header del comentario */
+.comment-card-header {
+    margin-bottom: 0.2rem;
+}
+
+/* Contenido del comentario */
+.comment-card-content {
+    margin: 0;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+/* Formulario*/
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.comments-form-section {
+    max-width: 700px;
+    margin: 2rem auto 0;
+}
+
+.comments-form-header {
+    margin-bottom: 0.8rem;
+}
+
+.comments-form-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-font3);
+}
+
+.comments-form-header p {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-font2);
+    opacity: 0.8;
+}
+
+.comment-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.comment-row label {
+    font-size: 0.75rem;
+    color: var(--color-font3);
+    opacity: 0.7;
+}
+
+.comment-name {
+    padding: 0.55rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: var(--color-dark3);
+    color: var(--color-font2);
+    font-size: 0.85rem;
+}
+
+.comment-name:focus {
+    outline: none;
+    border-color: var(--color-emphasis);
+}
+
+.comment-input {
+    min-height: 80px;
+    max-height: 160px;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: var(--color-dark3);
+    color: var(--color-font2);
+    font-size: 0.9rem;
+    resize: vertical;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: var(--color-emphasis);
+}
+
+.comment-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.4rem;
+	gap: 0.4rem;
+}
+
+.comment-hint {
+    font-size: 0.7rem;
+    color: var(--color-font2);
+    opacity: 0.6;
+}
+
+.comment-submit {
+    padding: 0.55rem 1.1rem;
+    background-color: var(--color-emphasis2);
+    color: var(--color-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.comment-submit:hover {
+    background-color: var(--color-emphasis);
+    transform: translateY(-1px);
+}
+
+.comment-submit:active {
+    transform: translateY(0);
+}

@@ -1,0 +1,177 @@
+<?php
+class Article
+{
+	private $db;
+
+	public function __construct($db)
+	{
+		$this->db = $db;
+	}
+
+	public function getAll()
+	{
+		$query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id ORDER BY id DESC";
+		$stmt = $this->db->query($query);
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function getByLink($link, $countView = true)
+	{
+		$query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id WHERE enlace = :link LIMIT 1";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(':link', $link);
+		$stmt->execute();
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		if ($results && $countView) {
+			$upQuery = "UPDATE articulos SET vistas = vistas + 1 WHERE enlace = :link";
+			$upstmt = $this->db->prepare($upQuery);
+			$upstmt->bindParam(':link', $link);
+			$upstmt->execute();
+		}
+		return $results;
+	}
+
+	public function getById($id)
+	{
+		$query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id WHERE articulos.id = :id LIMIT 1";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(':id', $id);
+		$stmt->execute();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
+
+	public function getByLast()
+	{
+		$query = "SELECT articulos.*, users.username AS author FROM articulos LEFT JOIN users ON articulos.autor_id = users.id ORDER BY fecha DESC LIMIT 1;";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
+
+	public function getRelated($link)
+	{
+		$art = $this->getByLink($link, false);
+
+		$query = "SELECT titulo, enlace, descripcion, img
+				  FROM articulos 
+				  WHERE (titulo LIKE :search1 OR descripcion LIKE :search2 OR categoria LIKE :search3 OR enlace LIKE :search4 ) 
+				  AND enlace != :link
+				  LIMIT 4";
+
+		$stmt = $this->db->prepare($query);
+		$searchTerm = '%' . $art['titulo'] . '%';  // Usamos el título como término de búsqueda
+		$stmt->bindParam(':search1', $searchTerm);
+		$stmt->bindParam(':search2', $searchTerm);
+		$stmt->bindParam(':search3', $searchTerm);
+		$stmt->bindParam(':search4', $searchTerm);
+		$stmt->bindParam(':link', $link);
+
+		$stmt->execute();
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+		return $results;
+	}
+
+	public function getSearch($search)
+	{
+		$stmt = $this->db->prepare("
+			SELECT * FROM articulos 
+				WHERE titulo LIKE :q 
+	   				OR contenido LIKE :q 
+	   				OR descripcion LIKE :q 
+			ORDER BY fecha DESC
+		");
+		$stmt->execute(['q' => '%' . $search . '%']);
+		$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		return $resultados;
+	}
+
+
+	public function create($title, $content, $link, $category, $description, $image)
+	{
+		$query = "INSERT INTO articulos (titulo, autor_id, contenido, categoria ,enlace, descripcion, img) VALUES (:title, :author, :content, :categoria, :link, :description, :img)";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(":title", $title);
+		$stmt->bindParam(":author", $_SESSION['user_id']);
+		$stmt->bindParam(":content", $content);
+		$stmt->bindParam(":categoria", $category);
+		$stmt->bindParam(":link", $link);
+		$stmt->bindParam(":description", $description);
+		$stmt->bindParam(":img", $image);
+
+		try {
+			$stmt->execute();
+			echo json_encode(["status" => "success", "message" => "Artículo creado"]);
+		} catch (PDOException $e) {
+			http_response_code(500);
+			echo json_encode(["status" => "error", "message" => "Error al crear artículo" . $e]);
+		}
+	}
+
+	public function update($id, $title, $content, $link, $category, $description, $image)
+	{
+		$query = "UPDATE articulos SET titulo = :title, autor_id = :author, contenido = :content, categoria = :category, enlace = :link, descripcion = :description, img = :img WHERE id = :id";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(":title", $title);
+		$stmt->bindParam(":author", $_SESSION['user_id']);
+		$stmt->bindParam(":content", $content);
+		$stmt->bindParam(":category", $category);
+		$stmt->bindParam(":link", $link);
+		$stmt->bindParam(":description", $description);
+		$stmt->bindParam(":img", $image);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			http_response_code(200);
+			echo json_encode(["status" => "success", "message" => "Artículo actualizado"]);
+		} else {
+			http_response_code(404);
+			echo json_encode(["status" => "error", "message" => "Artículo no encontrado"]);
+		}
+	}
+
+	public function delete($id)
+	{
+		$query = "DELETE FROM articulos WHERE id = :id";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0) {
+			http_response_code(200);
+			echo json_encode(["status" => "success", "message" => "Artículo eliminado"]);
+		} else {
+			http_response_code(404);
+			echo json_encode(["status" => "error", "message" => "Artículo no encontrado"]);
+		}
+	}
+	public function getComments($id)
+	{
+		$query = "SELECT contenido, autor FROM comentarios WHERE id_art = :id  ORDER BY id DESC";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+
+	public function storeComment(array $data){
+		$stmt = $this->db->prepare("
+        INSERT INTO comentarios (id_art, autor, contenido)
+        VALUES (:article_id, :author, :content)");
+
+		$stmt->execute([
+			':article_id' => $data['article_id'],
+			':author'     => $data['author'],
+			':content'    => $data['content']
+		]);
+
+		try {
+			echo json_encode(["status" => "success", "message" => "Comentario creado"]);
+		} catch (PDOException $e) {
+			http_response_code(500);
+			echo json_encode(["status" => "error", "message" => "Error al crear comentario" . $e]);
+		}
+	}
+}
