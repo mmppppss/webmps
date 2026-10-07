@@ -4,14 +4,14 @@
 	"descripcion": "Noticias locales, anuncios y deporte de Camiri, Bolivia. La información de tu comunidad, en un solo lugar.",
 	"url": "https://mmppppss.rf.gd",
 	"twitter": "@mmppppss",
-	"keywords": "Art, programming, design",
+	"keywords": "noticias Camiri, Camiri, Santa Cruz, Bolivia, actualidad local, deportes, sociedad, cultura, programación, ciberseguridad",
 	"autor": "mps",
 
 	"idioma": "es",
 	"locale": "es_BO",
 	"themeColor": "#4fc3f7",
-	"favicon": "/media/logomain.png",
-	"imagenPorDefecto": "/media/logomain.png",
+	"favicon": "/media/cookie1.webp",
+	"imagenPorDefecto": "/media/cookie1.webp",
 
 	"redes": {
 		"github": "https://github.com/mmppppss",

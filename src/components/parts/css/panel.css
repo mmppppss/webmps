@@ -1,41 +1,44 @@
-
 .panel {
-	width: auto;
+	width: 280px;
+	max-width: 85vw;
 	height: 100vh;
 	display: none;
 	position: fixed;
-	background-color:var(--color-dark2);
-	border-right: solid 2px var(--color-dark3);
-	z-index:2;
-	margin-top: -100px;
-	padding-top: 60px;
-}
-.panelOpen {
-	display: block;
-}
-.void {
-	display: none;
-	opacity: 0;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 1;
+	top: 0;
+	left: 0;
+	z-index: 60;
+	/* Todo el panel baja lo que mide el header, para que el header
+	   (con el botón hamburguesa) quede por encima y nada quede tapado. */
+	padding-top: 68px;
+	background: var(--glass-bg-strong);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+	border-right: 1px solid var(--glass-border);
+	box-shadow: var(--shadow-lg);
+	/* El panel entero no se desplaza: solo se desliza la lista de artículos */
+	overflow: hidden;
+	flex-direction: column;
 }
 
-.search{
-	display: block ruby;
-	padding: 15px;
+.panelOpen {
+	display: flex;
 }
-.search>input[type=text]{
-	width:85%;
+
+.void {
+	opacity: 0;
+	position: fixed;
+	inset: 0;
+	z-index: 55;
 }
-/* stile nerdtree */
-.tree{
-	border-top: 2px solid var(--color-dark3);
-	border-bottom: 2px solid var(--color-dark3);
-	height:65vh;
-	overflow-y: scroll;
+
+.tree {
+	border-top: 1px solid var(--border);
+	border-bottom: 1px solid var(--border);
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
 }
+
 .tree ul {
 	margin: 0;
 	padding: 0;
@@ -46,11 +49,8 @@
 	margin-left: 1em;
 	position: relative;
 }
-/*
-.tree ul ul ul {
-	margin-left: .5em;
-}*/
-.tree ul ul:before {
+
+.tree ul ul::before {
 	content: '';
 	display: block;
 	width: 0;
@@ -58,7 +58,7 @@
 	top: 0;
 	bottom: 0;
 	left: 0;
-	border-left: 1px solid var(--color-font3);
+	border-left: 1px solid var(--fg-muted);
 }
 
 .tree li {
@@ -68,72 +68,131 @@
 	position: relative;
 }
 
-.tree ul li:before {
+/* Solo los artículos llevan interlineado apretado: los títulos largos se
+   parten en 2 líneas y con 2em quedaban demasiado separados. Categorías y
+   submenús conservan el 2em original. */
+.tree li.art {
+	line-height: 1.6;
+}
+
+.tree ul li::before {
 	content: '';
 	display: block;
 	width: 10px;
 	height: 0;
-	border-top: 1px solid var(--color-font3);
+	border-top: 1px solid var(--fg-muted);
 	margin-top: -1px;
 	position: absolute;
 	top: 1em;
 	left: 0;
 }
 
-.tree ul li:last-child:before {
-	background-color:var(--color-dark2);
+.tree ul li:last-child::before {
+	background-color: transparent;
 	height: auto;
 	top: 1em;
 	bottom: 0;
 }
-.tree span{
-	margin-left:5px;
-	cursor: pointer;
+
+/* El conector baja al centro de la primera línea cuando el li es un
+   artículo (interlineado 1.6 → centro en 0.8em). Va después de las reglas
+   generales para ganar en especificidad. */
+.tree ul li.art::before,
+.tree ul li.art:last-child::before {
+	top: 0.8em;
 }
 
-/* Estado plegado: Panel.jsx alterna la clase .collapsed al pulsar el grupo.
-   Antes solo se ocultaba con `ul.hidden`, que se descartaba al recargar. */
+.tree span {
+	margin-left: 5px;
+	cursor: pointer;
+	/* Títulos largos: hasta 2 líneas y, si aún así no cabe, se recortan
+	   con puntos al final de la segunda. `min-width: 0` es necesario para
+	   que el bloque herede el ancho del li dentro del panel fijo. */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	min-width: 0;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+}
+
 .tree ul.collapsed {
 	display: none;
 }
 
-/* El input de búsqueda es type="search" desde la corrección del componente,
-   pero el selector original apuntaba a type="text" y ya no aplicaba. */
+/* Redes al pie del panel: iconos con separación entre ellos */
+.social {
+	gap: 16px;
+	padding: 10px 15px 20px;
+	border-top: 1px solid var(--border);
+	justify-content: center;
+}
+
+.social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	border: 1px solid var(--border);
+	border-radius: 50%;
+	color: var(--fg-muted);
+	transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.social-link:hover {
+	color: var(--accent);
+	border-color: var(--accent);
+	background: var(--bg-soft);
+}
+
+/* Buscador dentro del panel */
 .search-container {
 	padding: 15px;
+	background: transparent;
 }
 
 .search-input {
 	width: 100%;
-	padding: 8px;
-	border-radius: 4px;
-	border: 1px solid var(--color-dark3);
-	background-color: var(--color-dark);
-	color: inherit;
+	padding: 9px 12px;
+	border-radius: var(--radius-sm);
+	border: 1px solid var(--border);
+	background: var(--bg-soft);
+	color: var(--fg);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input::placeholder {
+	color: var(--fg-muted);
+	opacity: 0.7;
 }
 
 .search-input:focus {
-	outline: 2px solid #4fc3f7;
-	outline-offset: 1px;
+	outline: none;
+	border-color: var(--ring);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
 }
 
 .results-panel {
 	margin-top: 8px;
 	max-height: 50vh;
 	overflow-y: auto;
-	border-top: 1px solid var(--color-dark3);
+	background: transparent;
+	border: none;
 }
 
 .result-item {
 	display: block;
-	padding: 8px 5px;
+	padding: 8px 10px;
 	text-decoration: none;
 	color: inherit;
-	border-bottom: 1px solid var(--color-dark3);
+	border-bottom: 1px solid var(--border);
+	background: transparent;
+	transition: background-color 0.15s ease;
 }
 
 .result-item:hover {
-	background-color: var(--color-dark3);
+	background-color: var(--bg-soft);
 }
 
 .result-item h4 {
@@ -151,4 +210,49 @@
 	padding: 8px 5px;
 	font-size: 0.85rem;
 	opacity: 0.7;
+}
+
+/* ── Panel más ancho en pantallas medianas ────────────────────────────────
+   En móvil sigue mandando max-width: 85vw. */
+@media (min-width: 768px) {
+	.panel {
+		width: 320px;
+	}
+}
+
+/* ── Pantallas grandes: el panel pasa a barra lateral fija ────────────────
+   En vez de tapar el contenido (drawer + overlay), el panel se queda
+   abierto y lo desplaza con padding-left en #main. El hamburguesa sigue
+   funcionando para plegarlo, y el fondo (.void) deja de servir aquí para
+   que clicar el contenido no lo cierre.
+
+   El estado lo añade App.togglePanel sobre #main (#main.panel-abierto),
+   así que al plegarlo el contenido recupera el ancho completo. */
+@media (min-width: 1200px) {
+	#main.panel-abierto {
+		padding-left: 340px;
+	}
+
+	#main.panel-abierto .panel {
+		width: 340px;
+		/* El header ya no pasa por encima del panel (se desplaza a la
+		   derecha), así que el contenido del panel puede empezar arriba.
+		   Con el padding de 15px del buscador, el input queda alineado
+		   con el centro de la barra de 68px. */
+		padding-top: 0;
+	}
+
+	#main.panel-abierto .void {
+		display: none !important;
+	}
+}
+
+@media (min-width: 1600px) {
+	#main.panel-abierto {
+		padding-left: 380px;
+	}
+
+	#main.panel-abierto .panel {
+		width: 380px;
+	}
 }

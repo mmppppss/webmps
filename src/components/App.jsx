@@ -22,6 +22,10 @@ export default class App extends Component {
 
 	componentDidMount() {
 		window.addEventListener('popstate', this.onPopState);
+
+		// En pantallas grandes el panel arranca abierto: es barra lateral y
+		// desplaza el contenido. El mismo breakpoint que usa panel.css.
+		if (window.innerWidth >= 1200) this.togglePanel();
 	}
 
 	componentWillUnmount() {
@@ -33,12 +37,16 @@ export default class App extends Component {
 	}
 
 	togglePanel() {
+		const main = document.getElementById('main');
 		const panel = document.querySelector('.panel');
 		const more = document.querySelector('.more');
 		const bvoid = document.querySelector('.void');
 		if (!panel || !more || !bvoid) return;
 
 		const abierto = panel.classList.toggle('panelOpen');
+		// En pantallas grandes este mismo estado añade el padding que
+		// desplaza el contenido (ver panel.css): el panel empuja, no tapa.
+		if (main) main.classList.toggle('panel-abierto', abierto);
 		bvoid.style.display = abierto ? 'block' : 'none';
 		more.classList.toggle('open', abierto);
 	}

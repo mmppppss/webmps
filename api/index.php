@@ -71,6 +71,38 @@ $mimeTypes = [
 	'webmanifest' => 'application/manifest+json',
 ];
 
+// ── /sitemap.xml y /robots.txt ──────────────────────────────────────────────
+// Se resuelven aquí y no con reglas de reescritura, por dos motivos:
+//   1. En producción el catch-all de SPA (index.php?l=...) se come estas
+//      rutas antes de que lleguen a api/sitemap.php.
+//   2. Reescribir hacia api/ choca con el bloqueo de api/.htaccess
+//      (RewriteRule ^sitemap\.php$ - [F]), que devolvería un 403.
+// Un require interno no pasa por esas reglas.
+if ($enlace === 'sitemap.xml') {
+	$rutaSitemap = $raiz . '/api/sitemap.php';
+	if (is_file($rutaSitemap)) {
+		require $rutaSitemap;
+	} else {
+		error_log('api/index.php: falta ' . $rutaSitemap);
+		http_response_code(500);
+	}
+	exit;
+}
+
+if ($enlace === 'robots.txt' && !is_file($raiz . '/robots.txt')) {
+	// El fichero no está subido: se genera desde site.config.json. Google
+	// trata un 404 como "allow all", pero se pierde la línea del sitemap.
+	header('Content-Type: text/plain; charset=utf-8');
+	header('Cache-Control: public, max-age=3600');
+	echo "User-agent: *\n";
+	echo "Allow: /\n";
+	echo "Disallow: /panel/\n";
+	echo "Disallow: /api/\n";
+	echo "Disallow: /api/public/\n";
+	echo "\nSitemap: " . $siteUrl . "/sitemap.xml\n";
+	exit;
+}
+
 // ── Archivos estáticos ──────────────────────────────────────────────────────
 // Se valida que la ruta resuelta siga dentro de $raiz. Sin esta comprobación,
 // file_exists() + readfile() permitirían leer ficheros fuera del proyecto con
@@ -118,6 +150,7 @@ if ($esPortada) {
 	$autor       = $siteName;
 	$categoria   = '';
 	$fecha       = date('c');
+	$fechaMod    = $fecha;
 } else {
 	// ── Artículo ─────────────────────────────────────────────────────────────
 	try {
@@ -142,6 +175,7 @@ if ($esPortada) {
 		$autor       = $siteName;
 		$categoria   = '';
 		$fecha       = date('c');
+		$fechaMod    = $fecha;
 	} else {
 		$titulo      = $articulo['titulo'];
 		$descripcion = trim((string) $articulo['descripcion']);
@@ -155,6 +189,11 @@ if ($esPortada) {
 		$fecha       = !empty($articulo['created_at'])
 			? date('c', strtotime((string) $articulo['created_at']))
 			: date('c');
+		// article:modified_time debe venir de updated_at: con created_at
+		// siempre, Google veía el artículo como "nunca actualizado"
+		$fechaMod    = !empty($articulo['updated_at'])
+			? date('c', strtotime((string) $articulo['updated_at']))
+			: $fecha;
 	}
 }
 
@@ -164,6 +203,121 @@ $descripcion = mb_substr($descripcion, 0, 160);
 $e = function ($v) {
 	return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
 };
+
+// ── Dimensiones reales de la imagen social ─────────────────────────────────
+// og:image:width/height evitan que WhatsApp, Facebook o Discover recorten la
+// miniatura a ciegas. Solo se emiten si el fichero existe en el servidor y
+// getimagesize puede leerlo (si la imagen es remota, no se adivina nada).
+$imgAncho = 0;
+$imgAlto  = 0;
+$imgTipo  = '';
+
+if ($imagen !== '' && strpos($imagen, $siteUrl . '/') === 0 && function_exists('getimagesize')) {
+	$relImagen = substr($imagen, strlen($siteUrl) + 1);
+
+	// En producción los medios viven en la raíz; en desarrollo con Vite se
+	// sirven desde public/. Se prueba en ese orden.
+	$candidatosImagen = [
+		$raiz . '/' . rawurldecode($relImagen),
+		$raiz . '/public/' . rawurldecode($relImagen),
+	];
+
+	foreach ($candidatosImagen as $pathImagen) {
+		if (!is_file($pathImagen)) {
+			continue;
+		}
+
+		$info = @getimagesize($pathImagen);
+		if (is_array($info)) {
+			$imgAncho = (int) $info[0];
+			$imgAlto  = (int) $info[1];
+			$imgTipo  = (string) ($info['mime'] ?? '');
+		}
+		break;
+	}
+}
+
+// ── Datos estructurados (JSON-LD) ──────────────────────────────────────────
+// El README prometía JSON-LD y no había ninguno. Sale en el mismo grafo la
+// identidad del sitio (WebSite + Organization) y, en artículos, el NewsArticle
+// con fechas reales y la miga de pan.
+$redes    = array_values((array) Site::get('redes', []));
+$grafoLd  = [];
+
+if ($esPortada) {
+	$grafoLd = [
+		'@context' => 'https://schema.org',
+		'@graph'   => [
+			[
+				'@type'       => 'WebSite',
+				'@id'         => $siteUrl . '/#website',
+				'url'         => $siteUrl . '/',
+				'name'        => $siteTitle,
+				'inLanguage'  => $idioma,
+				'description' => $descripcion,
+			],
+			[
+				'@type'   => 'Organization',
+				'@id'     => $siteUrl . '/#organization',
+				'name'    => $siteName,
+				'url'     => $siteUrl . '/',
+				'logo'    => $imagen,
+				'sameAs'  => $redes,
+			],
+		],
+	];
+} elseif (!$es404 && $articulo) {
+	$grafoLd = [
+		'@context' => 'https://schema.org',
+		'@graph'   => [
+			[
+				'@type'            => 'NewsArticle',
+				'@id'              => $url,
+				'headline'         => $titulo,
+				'description'      => $descripcion,
+				'url'              => $url,
+				'inLanguage'       => $idioma,
+				'datePublished'    => $fecha,
+				'dateModified'     => $fechaMod,
+				'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $url],
+				'author'           => ['@type' => 'Person', 'name' => $autor],
+				'publisher'        => [
+					'@type' => 'Organization',
+					'name'  => $siteName,
+					'url'   => $siteUrl . '/',
+					'logo'  => ['@type' => 'ImageObject', 'url' => Site::imagen('')],
+				],
+				'image'            => [$imagen],
+				'articleSection'   => $categoria,
+			],
+			[
+				'@type'           => 'BreadcrumbList',
+				'itemListElement' => [
+					[
+						'@type'    => 'ListItem',
+						'position' => 1,
+						'name'     => 'Inicio',
+						'item'     => $siteUrl . '/',
+					],
+					[
+						'@type'    => 'ListItem',
+						'position' => 2,
+						'name'     => $titulo,
+						'item'     => $url,
+					],
+				],
+			],
+			[
+				'@type'   => 'Organization',
+				'@id'     => $siteUrl . '/#organization',
+				'name'    => $siteName,
+				'url'     => $siteUrl . '/',
+				'logo'    => Site::imagen(''),
+				'sameAs'  => $redes,
+			],
+		],
+	];
+}
 
 // ── Bundle ──────────────────────────────────────────────────────────────────
 // El nombre del JS y del CSS se lee del manifiesto de Vite. Antes estaban
@@ -236,12 +390,23 @@ if ($es404) {
 	<meta property="og:type" content="<?= $es404 || $esPortada ? 'website' : 'article' ?>" />
 	<meta property="og:url" content="<?= $e($url) ?>" />
 	<meta property="og:image" content="<?= $e($imagen) ?>" />
+	<meta property="og:image:alt" content="<?= $e($descripcion) ?>" />
+	<?php if ($imgAncho > 0 && $imgAlto > 0): ?>
+	<meta property="og:image:width" content="<?= $e($imgAncho) ?>" />
+	<meta property="og:image:height" content="<?= $e($imgAlto) ?>" />
+	<?php endif; ?>
+	<?php if ($imgTipo !== ''): ?>
+	<meta property="og:image:type" content="<?= $e($imgTipo) ?>" />
+	<?php endif; ?>
 	<meta property="og:locale" content="<?= $e($locale) ?>" />
 	<?php if (!$es404 && !$esPortada): ?>
 	<meta property="article:published_time" content="<?= $e($fecha) ?>" />
-	<meta property="article:modified_time" content="<?= $e($fecha) ?>" />
+	<meta property="article:modified_time" content="<?= $e($fechaMod) ?>" />
 	<meta property="article:author" content="<?= $e($autor) ?>" />
 	<meta property="article:section" content="<?= $e($categoria) ?>" />
+	<?php if ($categoria !== ''): ?>
+	<meta property="article:tag" content="<?= $e($categoria) ?>" />
+	<?php endif; ?>
 	<?php endif; ?>
 
 	<!-- Twitter Card -->
@@ -249,6 +414,7 @@ if ($es404) {
 	<meta name="twitter:title" content="<?= $e($titulo) ?>" />
 	<meta name="twitter:description" content="<?= $e($descripcion) ?>" />
 	<meta name="twitter:image" content="<?= $e($imagen) ?>" />
+	<meta name="twitter:image:alt" content="<?= $e($descripcion) ?>" />
 	<?php if (Site::get('twitter', '') !== ''): ?>
 	<meta name="twitter:site" content="<?= $e(Site::get('twitter')) ?>" />
 	<?php endif; ?>
@@ -257,6 +423,13 @@ if ($es404) {
 	<link rel="canonical" href="<?= $e($url) ?>" />
 	<link rel="icon" href="<?= $e($favicon) ?>" />
 	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+	<?php if (!empty($grafoLd)): ?>
+	<!-- Datos estructurados: WebSite/Organization en la portada, NewsArticle +
+	    BreadcrumbList en artículos. JSON_HEX_TAG evita que un título con
+	     "</script>" dentro corte la etiqueta. -->
+	<script type="application/ld+json"><?= json_encode($grafoLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE) ?></script>
+	<?php endif; ?>
 
 	<?php foreach ($cssList as $css): ?>
 	<link rel="stylesheet" href="/<?= $e($css) ?>">

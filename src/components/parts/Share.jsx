@@ -16,11 +16,19 @@ export default function Share({ article }) {
 	// el titulo viene como `titulo`; se conserva `nombre` como fallback por si
 	// algun consumidor pasa el objeto con otro nombre
 	const titulo = article.titulo || article.nombre || article.enlace || '';
+	const descripcion = (article.descripcion || '').trim();
+
+	// WhatsApp no admite adjuntar imagen por URL: la miniatura de la tarjeta
+	// la saca del propio enlace (open graph). El texto, en cambio, sí lleva
+	// título y descripción para que el mensaje se entienda sin entrar.
+	const texto = descripcion
+		? `${titulo}\n${descripcion}\n${url}`
+		: `${titulo} ${url}`;
 
 	const compartir = async () => {
 		if (navigator.share) {
 			try {
-				await navigator.share({ title: titulo, url });
+				await navigator.share({ title: titulo, text: descripcion, url });
 				return;
 			} catch (err) {
 				// el usuario canceló el diálogo: no es un error
@@ -41,7 +49,7 @@ export default function Share({ article }) {
 		{
 			label: 'WhatsApp',
 			className: 'share-link share-whatsapp',
-			href: `https://wa.me/?text=${encodeURIComponent(`${titulo} ${url}`)}`,
+			href: `https://wa.me/?text=${encodeURIComponent(texto)}`,
 		},
 		{
 			label: 'Facebook',
@@ -51,7 +59,9 @@ export default function Share({ article }) {
 		{
 			label: 'X',
 			className: 'share-link share-x',
-			href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(titulo)}`,
+			href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(
+				descripcion ? `${titulo} — ${descripcion}`.slice(0, 200) : titulo
+			)}`,
 		},
 	];
 

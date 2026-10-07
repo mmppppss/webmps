@@ -1,91 +1,285 @@
 @import url("https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/serif.css");
 @import url("https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/typewriter.css");
 @import url("https://cdn.jsdelivr.net/gh/vsalvino/computer-modern@main/fonts/concrete.css");
-:root{
-	--color-emphasis: #fabd2f;
-	--color-emphasis2: #fe8019;
-	--color-dark: #282828;
-	--color-dark2: #3c3836;
-	--color-dark3: #32302f;
-	--color-font: #ebdbb2;
-	--color-font2: #f9f5d7;
-	--color-font3: #d5c4a1;
-	--color-accent: #83a598;
-	--color-destructive: #fb4934;
-	--color-border: #3c3836;
-	--color-input: #3c3836;
-	--color-ring: #fabd2f;
-	font-family: "Computer Modern Typewriter", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-	'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+/* ============================================================================
+   TEMAS
+   ----------------------------------------------------------------------------
+   El tema activo es el primero (Gruvbox). Para cambiar de tema:
+     1. Comenta el bloque :root de Gruvbox.
+     2. Descomenta el bloque :root del tema que quieras.
+   Todos los componentes usan las mismas variables, así que el cambio es
+   global sin tocar nada más.
+   ---------------------------------------------------------------------------- */
+
+/* ── Tema activo: Gruvbox ─────────────────────────────────────────────────── */
+:root {
+	/* Fondos */
+	--bg: #1d2021;
+	--bg-elevated: #282828;
+	--bg-soft: #32302f;
+	--bg-deeper: #3c3836;
+
+	/* Texto */
+	--fg: #ebdbb2;
+	--fg-muted: #d5c4a1;
+	--fg-strong: #f9f5d7;
+
+	/* Acentos */
+	--accent: #fabd2f;
+	--accent-2: #fe8019;
+	--accent-cool: #83a598;
+	--destructive: #fb4934;
+
+	/* Bordes / focus */
+	--border: rgba(213, 196, 161, 0.14);
+	--border-strong: rgba(213, 196, 161, 0.28);
+	--ring: #fabd2f;
+
+	/* Glassmorphism
+	   Los fondos son deliberadamente poco opacos (0.40 / 0.55): el color de
+	   detrás tiene que intuirse a través del panel para que se lea como
+	   cristal y no como una caja. Si el soporte de backdrop-filter falta,
+	   la hoja cae a superficie sólida (ver @supports al final del archivo). */
+	--glass-bg: rgba(50, 48, 47, 0.40);
+	--glass-bg-strong: rgba(48, 45, 43, 0.55);
+	--glass-border: rgba(235, 219, 178, 0.14);
+	--glass-blur: 18px;
+
+	/* Sombras */
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+	--shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+	--shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+
+	/* Radio */
+	--radius-sm: 6px;
+	--radius: 12px;
+	--radius-lg: 20px;
+
+	/* Espaciado / tipografía fluida */
+	--container: 900px;
+	--fs-h1: clamp(1.6rem, 4vw, 2.5rem);
+	--fs-h2: clamp(1.25rem, 3vw, 1.75em);
+	--fs-body: 1.02rem;
+
+	font-family: "Computer Modern Typewriter", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: var(--fs-body);
+	line-height: 1.65;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-body{
-	margin:0;
-	background-color:var(--color-dark);
-	color: var(--color-font);
+
+/* ── Otros temas (comentar/descomentar) ─────────────────────────────────────
+
+:root {
+	--bg: #f9f5d7;
+	--bg-elevated: #f2e5bc;
+	--bg-soft: #ebdbb2;
+	--bg-deeper: #d5c4a1;
+	--fg: #3c3836;
+	--fg-muted: #504945;
+	--fg-strong: #282828;
+	--accent: #b57614;
+	--accent-2: #af3a03;
+	--accent-cool: #076678;
+	--destructive: #9d0006;
+	--border: rgba(60, 56, 54, 0.12);
+	--border-strong: rgba(60, 56, 54, 0.25);
+	--ring: #b57614;
+	--glass-bg: rgba(242, 229, 188, 0.6);
+	--glass-bg-strong: rgba(235, 219, 178, 0.75);
+	--glass-border: rgba(60, 56, 54, 0.12);
+	--glass-blur: 12px;
 }
-a{
+
+:root {
+	--bg: #1e1e2e;
+	--bg-elevated: #181825;
+	--bg-soft: #313244;
+	--bg-deeper: #45475a;
+	--fg: #cdd6f4;
+	--fg-muted: #a6adc8;
+	--fg-strong: #f5e0dc;
+	--accent: #f9e2af;
+	--accent-2: #fab387;
+	--accent-cool: #89b4fa;
+	--destructive: #f38ba8;
+	--border: rgba(205, 214, 244, 0.12);
+	--border-strong: rgba(205, 214, 244, 0.25);
+	--ring: #f9e2af;
+	--glass-bg: rgba(49, 50, 68, 0.55);
+	--glass-bg-strong: rgba(69, 71, 90, 0.7);
+	--glass-border: rgba(205, 214, 244, 0.1);
+	--glass-blur: 14px;
+}
+
+:root {
+	--bg: #1a1b26;
+	--bg-elevated: #16161e;
+	--bg-soft: #24283b;
+	--bg-deeper: #414868;
+	--fg: #c0caf5;
+	--fg-muted: #9aa5ce;
+	--fg-strong: #f2f5ff;
+	--accent: #e0af68;
+	--accent-2: #ff9e64;
+	--accent-cool: #7aa2f7;
+	--destructive: #f7768e;
+	--border: rgba(192, 202, 245, 0.12);
+	--border-strong: rgba(192, 202, 245, 0.25);
+	--ring: #e0af68;
+	--glass-bg: rgba(36, 40, 59, 0.55);
+	--glass-bg-strong: rgba(65, 72, 104, 0.7);
+	--glass-border: rgba(192, 202, 245, 0.1);
+	--glass-blur: 14px;
+}
+
+*/
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	color: var(--fg);
+	background-color: var(--bg);
+	/* Manchas de color fijas detrás de todo el contenido: son lo que hace
+	   que el glassmorphism se note. Con un fondo plano (o con casi nada de
+	   variación) el backdrop-filter no tiene nada que difuminar y los paneles
+	   parecen cajas opacas.
+
+	   Van repartidas de forma irregular (tamaños y posiciones distintas, sin
+	   repetir la simetría de esquinas) y con alphas bajos: el resultado es un
+	   fondo oscuro con matices, no uno iluminado. Los colores son la propia
+	   paleta gruvbox, así que no pelean con el tema. */
+	background-image:
+		radial-gradient(26rem 26rem at 14% 18%, rgba(250, 189, 47, 0.07), transparent 65%),
+		radial-gradient(34rem 34rem at 82% 8%, rgba(254, 128, 25, 0.05), transparent 62%),
+		radial-gradient(30rem 30rem at 44% 52%, rgba(131, 165, 152, 0.05), transparent 68%),
+		radial-gradient(22rem 22rem at 92% 62%, rgba(211, 134, 155, 0.04), transparent 65%),
+		radial-gradient(38rem 38rem at 6% 78%, rgba(184, 187, 38, 0.04), transparent 66%),
+		radial-gradient(18rem 18rem at 66% 88%, rgba(250, 189, 47, 0.04), transparent 60%),
+		radial-gradient(24rem 24rem at 30% 34%, rgba(131, 165, 152, 0.03), transparent 70%),
+		radial-gradient(28rem 28rem at 72% 38%, rgba(254, 128, 25, 0.04), transparent 64%);
+	background-attachment: fixed;
+}
+
+a {
 	text-decoration: none;
-	color: var(--color-emphasis);
+	color: var(--accent);
+	transition: color 0.2s ease;
 }
-h1,h2,h3,h4{
-	color: var(--color-font2);
+a:hover {
+	color: var(--accent-2);
 }
+
+h1, h2, h3, h4 {
+	color: var(--fg-strong);
+	line-height: 1.3;
+}
+
 input,
-textarea {
-	background-color: var(--color-dark2);
-	color: var(--color-font3);
-	border: 1px solid var(--color-emphasis);
+textarea,
+select {
+	background-color: var(--bg-soft);
+	color: var(--fg);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	padding: 0.55rem 0.75rem;
+	font-family: inherit;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--fg-muted);
+	opacity: 0.7;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: var(--ring);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
 }
 
 button, input[type=submit] {
-	background-color: var(--color-emphasis2);
-	color: var(--color-dark);
-	border: 1px solid var(--color-emphasis2);
-}
-button:hover, input[type=submit]:hover{
-	background: var(--color-emphasis);
-	border-color: var(--color-emphasis);
-	color: var(--color-dark);
+	background-color: var(--accent-2);
+	color: var(--bg);
+	border: 1px solid var(--accent-2);
+	border-radius: var(--radius-sm);
+	padding: 0.5rem 1rem;
+	font-family: inherit;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-form{
-	background: var(--color-dark2);
+button:hover, input[type=submit]:hover {
+	background: var(--accent);
+	border-color: var(--accent);
+	transform: translateY(-1px);
+	box-shadow: var(--shadow-sm);
+}
+
+button:active, input[type=submit]:active {
+	transform: translateY(0);
+}
+
+form {
+	background: var(--bg-soft);
 	display: grid;
 	padding: 30px;
 	margin: auto;
 	width: fit-content;
+	border-radius: var(--radius);
 }
-form>input{
+
+form > input {
 	width: auto;
 	height: 30px;
-	margin: 10px auto 10px auto;
+	margin: 10px auto;
 }
-.content{
+
+.content {
 	margin: 10px;
+	max-width: var(--container);
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0 14px;
 }
-.social{
+
+.social {
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: center;
+	gap: 14px;
 	margin: 20px auto;
 	align-items: center;
 }
-.footer{
+
+.footer {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
 	text-align: center;
+	padding: 1.5rem 1rem;
+	opacity: 0.8;
 }
-.footer>*{
+
+.footer > * {
 	margin-top: 10px;
 	margin-left: 4px;
 	margin-right: 4px;
 }
 
 /* El botón de compartir hereda los estilos globales de `button`, que lo
-   pintaban naranja como un botón de envío. */
+   pintaban como un botón de envío. */
 .share-link {
 	border: 0;
 	cursor: pointer;
@@ -99,7 +293,8 @@ form>input{
 .article-cover img {
 	width: 100%;
 	height: auto;
-	border-radius: 6px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-md);
 }
 
 .article-cover figcaption,
@@ -109,30 +304,25 @@ form>input{
 	margin-top: 6px;
 }
 
-
-
-/* Contenedor principal */
 .article-container {
 	margin: 20px auto;
 	padding: 20px;
-	background-color: var(--color-dark3);
-	max-width: 900px;
-	border-radius: 8px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: var(--bg-soft);
+	max-width: var(--container);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-sm);
 }
 
-/* Título del artículo */
 .title {
-	font-size: 2.5em;
-	color: var(--color-font2);
+	font-size: var(--fs-h1);
+	color: var(--fg-strong);
 	text-align: center;
 	margin-bottom: 10px;
 }
 
-/* Autor del artículo */
 .author {
 	font-size: 1.2em;
-	color: var(--color-font3);
+	color: var(--fg-muted);
 	text-align: center;
 	margin-bottom: 20px;
 }
@@ -141,22 +331,20 @@ form>input{
 	font-weight: bold;
 }
 
-
-/* Contenedor de botones de compartir */
 .share-buttons {
 	display: flex;
 	justify-content: space-around;
 	margin-top: 20px;
 	flex-wrap: wrap;
+	gap: 0.25rem;
 }
 
-/* Enlaces de compartir */
 .share-link {
 	display: inline-block;
-	background-color: var(--color-emphasis);
-	color: var(--color-dark);
+	background-color: var(--accent);
+	color: var(--bg);
 	padding: 7px 20px;
-	border-radius: 4px;
+	border-radius: var(--radius-sm);
 	text-align: center;
 	width: fit-content;
 	font-size: 0.9em;
@@ -166,22 +354,49 @@ form>input{
 }
 
 .share-link:hover {
-	background-color: var(--color-emphasis2);
+	background-color: var(--accent-2);
+	/* `a:hover` (0,1,1) gana a `.share-link` (0,1,0): sin esto el texto del
+	   enlace se pintaba del mismo naranja que el fondo y desaparecía. */
+	color: var(--bg);
 	transform: translateY(-3px);
 }
 
-.loader{
+.loader {
 	width: 10%;
 }
-.info{
+
+.info {
 	text-align: center;
-	font-size: 0.8em;
-	color: var(--color-font3);
+	font-size: 0.85em;
+	color: var(--fg-muted);
 }
 
-/* ── Elementos añadidos por los componentes corregidos ───────────────────── */
+/* ── Helpers de glassmorphism ─────────────────────────────────────────────── */
+.glass {
+	background: var(--glass-bg);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+	border: 1px solid var(--glass-border);
+	box-shadow: var(--shadow-sm);
+}
 
-/* Panel de comentarios: mensaje de error y aviso de moderación */
+/* Si el navegador no soporta backdrop-filter, caer a superficie sólida.
+   Se reescriben las variables: así todos los componentes que las usan
+   (menú, panel, tarjetas, comentarios) se vuelven opacos de una vez, en
+   vez de quedarse translúcidos sin poder difuminar nada. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	:root {
+		--glass-bg: var(--bg-elevated);
+		--glass-bg-strong: var(--bg-elevated);
+		--glass-blur: 0px;
+	}
+
+	.glass {
+		background: var(--bg-elevated);
+	}
+}
+
+/* ── Accesibilidad ────────────────────────────────────────────────────────── */
 .comment-error,
 .comment-aviso {
 	display: block;
@@ -189,13 +404,8 @@ form>input{
 	font-size: 0.9rem;
 }
 
-.comment-error {
-	color: var(--color-destructive);
-}
-
-.comment-aviso {
-	color: var(--color-emphasis);
-}
+.comment-error { color: var(--destructive); }
+.comment-aviso { color: var(--accent); }
 
 .comment-submit:disabled {
 	opacity: 0.6;
@@ -209,7 +419,6 @@ form>input{
 	font-weight: normal;
 }
 
-/* Texto solo para lectores de pantalla */
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -220,4 +429,12 @@ form>input{
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
 }

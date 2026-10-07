@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# InfoCamiri — reglas de reescritura
+#  reglas de reescritura
 #
 # El hosting compartido usa Apache. Este archivo hace tres cosas:
 #   1. enruta /mi-articulo al shell de SEO (api/index.php)
@@ -10,8 +10,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # ── sitemap ────────────────────────────────────────────────────────────
-    RewriteRule ^sitemap\.xml$ api/sitemap.php [L]
+    # ── sitemap y robots ───────────────────────────────────────────────────
+    # No hay regla: los resuelve el shell SEO (api/index.php) con un require
+    # interno. Reescribir a api/sitemap.php choca con api/.htaccess, que
+    # bloquea ese fichero con - [F] (devolvería un 403).
 
     # ── API: /api/public/index.php/... ────────────────────────────────────
     # En desarrollo con Vite el panel llama a la URL completa, así que se
