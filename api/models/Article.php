@@ -79,7 +79,7 @@ class Article
 			$stmt = $this->db->prepare($sql);
 			$stmt->bindParam(':enlace', $slug);
 			if ($excludeId !== null) {
-				$stmt->bindParam(':id', (int) $excludeId, PDO::PARAM_INT);
+				$stmt->bindValue(':id', (int) $excludeId, PDO::PARAM_INT);
 			}
 			$stmt->execute();
 
@@ -185,7 +185,7 @@ class Article
 		$stmt = $this->db->prepare(
 			"SELECT 1 FROM articulos WHERE id = :id AND deleted_at IS NULL LIMIT 1"
 		);
-		$stmt->bindParam(':id', (int) $id, PDO::PARAM_INT);
+		$stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
 		$stmt->execute();
 		return (bool) $stmt->fetchColumn();
 	}
@@ -232,7 +232,7 @@ class Article
 		          WHERE a.id = :id AND a.deleted_at IS NULL
 		          LIMIT 1";
 		$stmt = $this->db->prepare($query);
-		$stmt->bindParam(':id', (int) $id, PDO::PARAM_INT);
+		$stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
 		$stmt->execute();
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
@@ -465,7 +465,7 @@ class Article
 		$stmt = $this->db->prepare(
 			"UPDATE articulos SET deleted_at = NOW() WHERE id = :id AND deleted_at IS NULL"
 		);
-		$stmt->bindParam(":id", (int) $id, PDO::PARAM_INT);
+		$stmt->bindValue(":id", (int) $id, PDO::PARAM_INT);
 		$stmt->execute();
 
 		if ($stmt->rowCount() > 0) {
@@ -476,7 +476,7 @@ class Article
 
 		// Si no se actualizó nada puede que ya estuviera borrado
 		$existe = $this->db->prepare("SELECT 1 FROM articulos WHERE id = :id LIMIT 1");
-		$existe->bindParam(":id", (int) $id, PDO::PARAM_INT);
+		$existe->bindValue(":id", (int) $id, PDO::PARAM_INT);
 		$existe->execute();
 
 		if ($existe->fetch()) {
@@ -495,7 +495,7 @@ class Article
 		          WHERE id_art = :id AND aprobado = 1 AND deleted_at IS NULL
 		          ORDER BY created_at DESC";
 		$stmt = $this->db->prepare($query);
-		$stmt->bindParam(":id", (int) $id, PDO::PARAM_INT);
+		$stmt->bindValue(":id", (int) $id, PDO::PARAM_INT);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
