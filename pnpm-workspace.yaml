@@ -1,0 +1,11 @@
+# pnpm workspace: el sitio público (raíz) y el panel son dos paquetes.
+packages:
+  - '.'
+  - 'adminpanel'
+
+# pnpm 12 pide confirmación explícita antes de ejecutar los scripts de
+# instalación de dependencias. Sin esto, esbuild y @swc/core no compilan sus
+# binarios y `vite build` falla con "Cannot find module @esbuild/linux-x64".
+allowBuilds:
+  '@swc/core': true
+  esbuild: true

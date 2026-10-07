@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /panel/
+Disallow: /api/
+
+# El panel no debe indexarse nunca. Antes tampoco había robots.txt, así que
+# un buscador podía llegar a /panel/ por un enlace suelto y quedarse con la
+# pantalla de login cacheada.
+Disallow: /api/public/
+
+Sitemap: https://infocamiri.rf.gd/sitemap.xml

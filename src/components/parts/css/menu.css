@@ -6,11 +6,23 @@
     position: relative;
 }
 
+/* El botón del menú no tenía fondo ni borde: el navegador le pintaba el
+   contorno por defecto y el área de pulsación era más pequeña que la barra. */
 .showPanel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: 0;
+	padding: 6px;
+	cursor: pointer;
 }
+
+.showPanel:focus-visible {
+	outline: 2px solid #4fc3f7;
+	outline-offset: 2px;
+}
+
 .more {
 	display: inline-block;
 	cursor: pointer;

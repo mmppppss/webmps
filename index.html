@@ -2,38 +2,38 @@
 <html lang="es">
 
 <head>
-
 	<meta charset="UTF-8" />
-	<title>
-		mmppppss
-	</title>
-	<meta name="description" content="Blog personal" />
-	<meta name="author" content="mps" />
-	<meta name="robots" content="index, follow" />
+
+	<!--
+		Las etiquetas definitivas (title, description, og:*, canonical) las
+		inyecta api/index.php con los datos reales del artículo, leyéndolos de
+		site.config.json.
+
+		Este bloque solo es el fallback para cuando se sirve index.html
+		directamente sin pasar por PHP (por ejemplo `pnpm preview`). Los valores
+		de aquí son los mismos del archivo de configuración, pero si cambias el
+		nombre del sitio tendrás que actualizarlos también, o el fallback
+		publicará el nombre antiguo.
+	-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<!-- Open Graph -->
-	<meta property="og:title" content="MMPPPPS Blog" />
-	<meta property="og:description" content="Blog personal" />
-	<meta property="og:type" content="article" />
-	<meta property="og:url" content="https://mmppppss.com" />
-	<meta property="og:image" content="./logomain.png" />
-	<meta property="og:site_name" content="MMPPPPS Blog" />
-	<meta property="article:published_time" content="2025-08-01" />
-	<meta property="article:author" content="mps" />
+	<title>InfoCamiri · Noticias de Camiri</title>
+	<meta
+		name="description"
+		content="Noticias locales, anuncios y deporte de Camiri, Bolivia. La información de tu comunidad, en un solo lugar."
+	/>
+	<meta name="robots" content="index, follow" />
+	<meta name="theme-color" content="#4fc3f7" />
 
-	<!-- Twitter Card -->
+	<meta property="og:site_name" content="InfoCamiri" />
+	<meta property="og:title" content="InfoCamiri · Noticias de Camiri" />
+	<meta property="og:description" content="Noticias locales, anuncios y deporte de Camiri, Bolivia." />
+	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="es_BO" />
+
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="MMPPPPS Blog" />
-	<meta name="twitter:description" content="Blog personal" />
-	<meta name="twitter:image" content="./logomain.png" />
-	<meta name="twitter:site" content="@mmppppss" />
 
-	<!-- Otros metadatos -->
-	<meta name="keywords" content="blog,personal" />
-	<link rel="canonical" href="https://mmppppss.com/" />
-	<link rel="icon" href="./media/logomain.png" />
-
+	<link rel="icon" href="/media/logomain.png" />
 </head>
 
 <body>

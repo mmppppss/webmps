@@ -1,49 +1,87 @@
-import React from 'react'
+import { Component } from 'react';
 import Content from './Content';
-import {Menu, Footer, Loader, Panel} from './parts';
-import {Card, Rel} from './cards';
-export default class App extends React.Component {
+import { Menu, Footer, Panel } from './parts';
+import { Card, Rel } from './cards';
+
+/**
+ * Enlace del sitio público.
+ *
+ * Antes sacaba la ruta de `window.location.href.split("/")[3].replace("?i=1", "")`:
+ *   - con query strings distintas de ?i=1 la ruta quedaba contaminada
+ *   - sin history API el botón "atrás" del navegador salía del sitio
+ *   - `.replace()` sobre undefined lanza si la URL es solo "/"
+ *   - togglePanel manipulaba el DOM a mano y crasheaba si .panel no existía
+ */
+export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			article: {},
-			route: window.location.href.split("/")[3].replace("?i=1", ""),
-		};
+		this.state = { route: getRoute() };
+		this.togglePanel = this.togglePanel.bind(this);
+		this.onPopState = this.onPopState.bind(this);
 	}
+
+	componentDidMount() {
+		window.addEventListener('popstate', this.onPopState);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('popstate', this.onPopState);
+	}
+
+	onPopState() {
+		this.setState({ route: getRoute() });
+	}
+
 	togglePanel() {
-		const panel = document.querySelector(".panel");
-		const more = document.querySelector(".more");
-		const bvoid = document.querySelector(".void");
-		if (panel.classList.contains("panelOpen")) {
-			panel.classList.remove("panelOpen");
-			bvoid.style.display = "none";
-			more.classList.remove("open");
-		} else {
-			panel.classList.add("panelOpen");
-			bvoid.style.display = "block";
-			more.classList.add("open");
-		}
+		const panel = document.querySelector('.panel');
+		const more = document.querySelector('.more');
+		const bvoid = document.querySelector('.void');
+		if (!panel || !more || !bvoid) return;
+
+		const abierto = panel.classList.toggle('panelOpen');
+		bvoid.style.display = abierto ? 'block' : 'none';
+		more.classList.toggle('open', abierto);
 	}
+
 	content() {
-		if (this.state.route !== "") {
-			return (<Content enlace={this.state.route} />)
-		} else {
-			return (<div className="content">
-				<Card/>
-				<Rel />
-			</div>)
+		if (this.state.route !== '') {
+			return <Content enlace={this.state.route} />;
 		}
+
+		return (
+			<div className="content">
+				<Card />
+				<Rel />
+			</div>
+		);
 	}
+
 	render() {
 		return (
 			<div id="main">
 				<Menu togglePanel={this.togglePanel} />
-				<Panel list={this.state.list} />
-				<div className="void" onClick={this.togglePanel}>esto es un bloque vacio que ni se muestra pero tiene uso, hola</div>
+				<Panel />
+				<div
+					className="void"
+					onClick={this.togglePanel}
+					aria-hidden="true"
+					style={{ display: 'none' }}
+				/>
 				{this.content()}
 				<hr />
 				<Footer />
 			</div>
 		);
 	}
+}
+
+/** Extrae el slug de la URL sin depender de posiciones fijas del array. */
+function getRoute() {
+	if (typeof window === 'undefined') return '';
+
+	const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+
+	if (path === '' || path === 'index.html') return '';
+
+	return decodeURIComponent(path);
 }

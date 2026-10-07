@@ -1,7 +1,15 @@
 {
-	"siteName": "mmppppss",
-	"siteTitle": "mmppppss Blog",
-	"siteUrl": "https://mmppppss.rf.gd",
-	"siteTwitter": "@mmppppss",
-	"siteKeywords": "blog,personal"
+	"siteName": "InfoCamiri",
+	"siteTitle": "InfoCamiri · Noticias de Camiri",
+	"siteUrl": "https://infocamiri.rf.gd",
+	"siteTwitter": "@infocamiri",
+	"siteKeywords": "Camiri,Bolivia,noticias,deportes,cultura,economia",
+	"defaultShareImage": "media/logomain.png",
+	"language": "es_BO",
+	"themeColor": "#4fc3f7",
+	"social": {
+		"github": "https://github.com/mmppppss",
+		"facebook": "https://facebook.com/mmppppss",
+		"instagram": "https://ig.me/mmppppss"
+	}
 }

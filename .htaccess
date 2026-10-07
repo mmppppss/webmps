@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# InfoCamiri — reglas de reescritura
+#
+# El hosting compartido usa Apache. Este archivo hace tres cosas:
+#   1. enruta /mi-articulo al shell de SEO (api/index.php)
+#   2. enruta las llamadas de la API
+#   3. protege el directorio api/ y el panel
+# ─────────────────────────────────────────────────────────────────────────────
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # ── sitemap ────────────────────────────────────────────────────────────
+    RewriteRule ^sitemap\.xml$ api/sitemap.php [L]
+
+    # ── API: /api/public/index.php/... ────────────────────────────────────
+    # En desarrollo con Vite el panel llama a la URL completa, así que se
+    # deja pasar /api/ sin reescribir.
+    RewriteRule ^api/ - [L]
+
+    # ── Panel de administración ───────────────────────────────────────────
+    # El build del panel se sirve como estático desde /panel/
+    RewriteRule ^panel(/.*)?$ - [L]
+
+    # ── Archivos y directorios reales: pasar tal cual ─────────────────────
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # ── Todo lo demás es un slug de artículo ──────────────────────────────
+    RewriteRule ^ api/index.php [L,QSA]
+</IfModule>
+
+# ── Compresión ──────────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Caché de estáticos ──────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # index.html nunca se cachea: si no, tras un deploy los usuarios siguen
+    # viendo el bundle viejo hasta que expire
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# ── Cabeceras ───────────────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # El panel es solo HTTPS y no necesita estar embebido
+    <FilesMatch "\.(php)$">
+        Header always set X-Frame-Options "DENY"
+    </FilesMatch>
+</IfModule>
+
+# ── No listar directorios ───────────────────────────────────────────────────
+Options -Indexes
+
+# ── Protecciones varias ─────────────────────────────────────────────────────
+# Bloquea el acceso directo a archivos sensibles que se hubieran subido
+<FilesMatch "\.(env|log|ini|sql|bak|md|json|lock)$">
+    Require all denied
+</FilesMatch>
+
+# La API nunca debe quedar cacheada por un intermediario: devuelve datos de
+# sesión y el estado 401 es específico del cliente.
+<FilesMatch "index\.php$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+</FilesMatch>

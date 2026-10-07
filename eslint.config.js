@@ -26,4 +26,27 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    // adminpanel/ es un proyecto Preact independiente. Antes el ESLint de la
+    // raíz lo cubría con la configuración de React, lo que marcaría errores
+    // falsos en los imports de preact/hooks.
+    files: ['adminpanel/**/*.{js,jsx}'],
+    ignores: ['adminpanel/dist', 'adminpanel/node_modules'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs['recommended-latest'],
+    ],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
 ])

@@ -90,3 +90,65 @@
 	margin-left:5px;
 	cursor: pointer;
 }
+
+/* Estado plegado: Panel.jsx alterna la clase .collapsed al pulsar el grupo.
+   Antes solo se ocultaba con `ul.hidden`, que se descartaba al recargar. */
+.tree ul.collapsed {
+	display: none;
+}
+
+/* El input de búsqueda es type="search" desde la corrección del componente,
+   pero el selector original apuntaba a type="text" y ya no aplicaba. */
+.search-container {
+	padding: 15px;
+}
+
+.search-input {
+	width: 100%;
+	padding: 8px;
+	border-radius: 4px;
+	border: 1px solid var(--color-dark3);
+	background-color: var(--color-dark);
+	color: inherit;
+}
+
+.search-input:focus {
+	outline: 2px solid #4fc3f7;
+	outline-offset: 1px;
+}
+
+.results-panel {
+	margin-top: 8px;
+	max-height: 50vh;
+	overflow-y: auto;
+	border-top: 1px solid var(--color-dark3);
+}
+
+.result-item {
+	display: block;
+	padding: 8px 5px;
+	text-decoration: none;
+	color: inherit;
+	border-bottom: 1px solid var(--color-dark3);
+}
+
+.result-item:hover {
+	background-color: var(--color-dark3);
+}
+
+.result-item h4 {
+	margin: 0 0 2px;
+	font-size: 0.95rem;
+}
+
+.result-item p {
+	margin: 0;
+	font-size: 0.8rem;
+	opacity: 0.7;
+}
+
+.result-empty {
+	padding: 8px 5px;
+	font-size: 0.85rem;
+	opacity: 0.7;
+}

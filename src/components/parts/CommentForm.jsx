@@ -1,35 +1,59 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export default function CommentForm({id }) {
-	const [nombre, setNombre] = useState("");
-	const [comentario, setComentario] = useState("");
+const api = import.meta.env.VITE_APP_API_URL;
 
+/**
+ * Formulario de comentarios.
+ *
+ * Antes, tras publicar, hacia `window.location.reload()`, lo que recarga toda
+ * la pagina y pierde la posicion de scroll. Ahora el comentario se agrega al
+ * estado local del padre.
+ *
+ * Los comentarios nuevos se guardan con aprobado=0: se avisa al usuario de
+ * que_passará por moderación en lugar de publicarlo al instante.
+ */
+export default function CommentForm({ id, onCreated }) {
+	const [nombre, setNombre] = useState('');
+	const [comentario, setComentario] = useState('');
+	const [enviando, setEnviando] = useState(false);
+	const [error, setError] = useState(null);
+	const [aviso, setAviso] = useState(null);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!comentario.trim()) return;
+		if (!comentario.trim() || enviando) return;
+
+		setEnviando(true);
+		setError(null);
+		setAviso(null);
 
 		try {
-			const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/art/comments/${id}`, {
+			const response = await fetch(`${api}/art/comments/${id}`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					author: nombre.trim() || 'Anónimo',
-					content: comentario.trim()
-				})
+					content: comentario.trim(),
+				}),
 			});
-			if (!response.ok) throw new Error('No se pudo enviar el comentario');
 
-			const savedComment = await response.json();
+			const data = await response.json().catch(() => ({}));
+
+			if (!response.ok) {
+				throw new Error(data.message || 'No se pudo enviar el comentario');
+			}
 
 			setComentario('');
 			setNombre('');
-			window.location.reload();
+			setAviso(data.message || 'Comentario recibido');
+
+			if (onCreated) onCreated(data);
 		} catch (err) {
-			console.error(err);
+			setError(err.message || 'No se pudo enviar el comentario');
+		} finally {
+			setEnviando(false);
 		}
 	};
-
 
 	return (
 		<section className="comments-form-section">
@@ -39,20 +63,19 @@ export default function CommentForm({id }) {
 			</header>
 
 			<form className="comment-form" onSubmit={handleSubmit}>
-				{/* Nombre */}
 				<div className="comment-row">
 					<label htmlFor="comment-name">Nombre</label>
 					<input
 						id="comment-name"
 						type="text"
+						maxLength={50}
 						className="comment-name"
 						placeholder="Anónimo"
 						value={nombre}
-						onChange={(e) => setNombre(e.target.value)}
+						onInput={(e) => setNombre(e.target.value)}
 					/>
 				</div>
 
-				{/* Comentario */}
 				<div className="comment-row">
 					<label htmlFor="comment-content">Comentario</label>
 					<textarea
@@ -60,18 +83,18 @@ export default function CommentForm({id }) {
 						className="comment-input"
 						placeholder="Escribe tu comentario..."
 						value={comentario}
-						onChange={(e) => setComentario(e.target.value)}
+						onInput={(e) => setComentario(e.target.value)}
+						required
 					/>
 				</div>
 
-				{/* Acciones */}
-				<div className="comment-actions">
-					<span className="comment-hint">
-						Sé respetuoso y aporta al debate
-					</span>
+				{error && <p className="comment-error">{error}</p>}
+				{aviso && <p className="comment-aviso">{aviso}</p>}
 
-					<button type="submit" className="comment-submit">
-						Publicar comentario
+				<div className="comment-actions">
+					<span className="comment-hint">Sé respetuoso y aporta al debate</span>
+					<button type="submit" className="comment-submit" disabled={enviando}>
+						{enviando ? 'Enviando…' : 'Publicar comentario'}
 					</button>
 				</div>
 			</form>

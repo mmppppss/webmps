@@ -1,64 +1,76 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'preact/hooks';
 
+/**
+ * Hook de fetch para el panel.
+ *
+ * La versión anterior estaba ROTA:
+ *   - `loadData()` usaba `response` fuera de su ámbito (ReferenceError)
+ *   - importaba de 'react' en un proyecto Preact
+ *   - hacía un `ping()` extra a la raíz de la API antes de cada petición
+ *   - declaraba un estado `connected` que nunca devolvía
+ *   - no enviaba `credentials`, así que la sesión no viajaba
+ *
+ * Los componentes ya no lo usan (usan fetch directo con credentials), pero se
+ * deja corregido por si se quiere reutilizar.
+ */
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-const useFetch = (url, method = 'GET', params = null) => {
+export default function useFetch(url, method = 'GET', body = null) {
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [connected, setConnected] = useState(true);
-	const apiUrl = import.meta.env.VITE_APP_API_URL;
-	const shortUrl = url;
-	url = apiUrl +"/"+ url;
-	const ping = async () => {
-		const response = await fetch(apiUrl);
-		setConnected(response.ok);
-	}
+
 	useEffect(() => {
-		const fetchData = async () => {
+		const controller = new AbortController();
+		let cancelado = false;
+
+		const run = async () => {
 			setLoading(true);
+			setError(null);
+
 			try {
-				const response = await fetch(url, {
+				const options = {
 					method,
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: params ? JSON.stringify(params) : null
-				});
+					signal: controller.signal,
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include', // sin esto no hay sesión
+				};
 
-				if (!response.ok)
-					throw new Error(response.statusText);
+				if (body && method !== 'GET') {
+					options.body = JSON.stringify(body);
+				}
 
-				const json = await response.json();
-				setData(json);
-			} catch (e) {
-				setError(e.message);
+				const response = await fetch(`${apiUrl}/${url}`, options);
+
+				if (!response.ok) {
+					const text = await response.text();
+					let message = `HTTP ${response.status}`;
+					try {
+						message = JSON.parse(text).message || message;
+					} catch {
+						// la respuesta no era JSON
+					}
+					throw new Error(message);
+				}
+
+				const text = await response.text();
+				if (!cancelado) setData(text ? JSON.parse(text) : null);
+			} catch (err) {
+				if (err.name !== 'AbortError' && !cancelado) {
+					setError(err.message);
+				}
 			} finally {
-				setLoading(false);
+				if (!cancelado) setLoading(false);
 			}
 		};
 
-		const loadData = async () => {
-			setLoading(true);
-			try{
-				setData(JSON.parse(response));
-			} catch(e){
-				setError(e.message);
-			}finally{
-				setLoading(false);
-			}
+		run();
+
+		return () => {
+			cancelado = true;
+			controller.abort();
 		};
-
-		const solve = async () => {
-			await ping();
-			if (connected)
-				fetchData()
-			else
-				loadData();
-		}
-		solve();
-
-	}, [url, method, params]);
+	}, [url, method, body]);
 
 	return { data, error, loading };
 }
-export default useFetch;

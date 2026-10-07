@@ -72,10 +72,41 @@ form>input{
 	align-items: center;
 }
 .footer{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 	justify-content: center;
+	text-align: center;
 }
 .footer>*{
 	margin-top: 10px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+/* El botón de compartir hereda los estilos globales de `button`, que lo
+   pintaban naranja como un botón de envío. */
+.share-link {
+	border: 0;
+	cursor: pointer;
+	font-family: inherit;
+}
+
+.article-cover {
+	margin: 20px 0;
+}
+
+.article-cover img {
+	width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.article-cover figcaption,
+.markdown-body figcaption {
+	font-size: 0.85em;
+	opacity: 0.75;
+	margin-top: 6px;
 }
 
 
@@ -146,4 +177,47 @@ form>input{
 	text-align: center;
 	font-size: 0.8em;
 	color: var(--color-font3);
+}
+
+/* ── Elementos añadidos por los componentes corregidos ───────────────────── */
+
+/* Panel de comentarios: mensaje de error y aviso de moderación */
+.comment-error,
+.comment-aviso {
+	display: block;
+	margin: 8px 0;
+	font-size: 0.9rem;
+}
+
+.comment-error {
+	color: var(--color-destructive);
+}
+
+.comment-aviso {
+	color: var(--color-emphasis);
+}
+
+.comment-submit:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.comment-date {
+	font-size: 0.75rem;
+	opacity: 0.6;
+	margin-left: 0.5rem;
+	font-weight: normal;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }

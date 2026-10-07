@@ -1,0 +1,32 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# api/ — todo este directorio es interno.
+#
+# El frontend nunca consume archivos PHP sueltos: entra por
+# /api/public/index.php/<ruta>. Este archivo evita que se_Listado el código
+# fuente o se ejecuten los modelos directamente.
+# ─────────────────────────────────────────────────────────────────────────────
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Todo excepto /public/ queda bloqueado con 403.
+    # Antes, /api/models/Article.php y /api/config/database.php eran
+    # alcanzables por URL.
+    RewriteRule ^config/ - [F]
+    RewriteRule ^models/ - [F]
+    RewriteRule ^controllers/ - [F]
+    RewriteRule ^routes/ - [F]
+    RewriteRule ^storage/ - [F]
+    RewriteRule ^sitemap\.php$ - [F]
+    RewriteRule ^index\.php$ - [F]
+
+    # .env nunca debe servirse
+    RewriteRule ^\.env - [F]
+</IfModule>
+
+# Evita que se descarguen como texto plano
+<FilesMatch "\.(php|env|ini|log|json)$">
+    Require all denied
+</FilesMatch>

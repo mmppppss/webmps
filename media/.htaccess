@@ -1,0 +1,9 @@
+# media/ solo contiene imagenes publicas.
+# -Indexes  evita que se liste el directorio.
+# nosniff  impide que el navegador adivine el tipo de un archivo.
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
