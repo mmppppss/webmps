@@ -3,37 +3,17 @@
 
 <head>
 	<meta charset="UTF-8" />
-
-	<!--
-		Las etiquetas definitivas (title, description, og:*, canonical) las
-		inyecta api/index.php con los datos reales del artículo, leyéndolos de
-		site.config.json.
-
-		Este bloque solo es el fallback para cuando se sirve index.html
-		directamente sin pasar por PHP (por ejemplo `pnpm preview`). Los valores
-		de aquí son los mismos del archivo de configuración, pero si cambias el
-		nombre del sitio tendrás que actualizarlos también, o el fallback
-		publicará el nombre antiguo.
-	-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<title>mmppppss</title>
-	<meta
-		name="description"
-		content="Noticias locales, anuncios y deporte de Camiri, Bolivia. La información de tu comunidad, en un solo lugar."
-	/>
-	<meta name="robots" content="index, follow" />
-	<meta name="theme-color" content="#4fc3f7" />
+	<!--
+		Aquí NO hay ninguna etiqueta de identidad (title, description, og:*,
+		theme-color, icono). Las inyecta el plugin `metasSitio` de
+		vite.config.js leyendo site.config.json, así que cambiar el nombre o
+		el icono del sitio es cambiar ese único archivo.
 
-	<meta property="og:site_name" content="InfoCamiri" />
-	<meta property="og:title" content="InfoCamiri · Noticias de Camiri" />
-	<meta property="og:description" content="Noticias locales, anuncios y deporte de Camiri, Bolivia." />
-	<meta property="og:type" content="website" />
-	<meta property="og:locale" content="es_BO" />
-
-	<meta name="twitter:card" content="summary_large_image" />
-
-	<link rel="icon" href="/media/logomain.png" />
+		En producción, además, api/index.php pone las etiquetas definitivas
+		con los datos reales del artículo (también desde site.config.json).
+	-->
 </head>
 
 <body>

@@ -1,8 +1,8 @@
-# 📰 InfoCamiri
+# 📰 mmppppss
 
 Medio digital local de **Camiri, Bolivia**: noticias, anuncios y deporte.
 
-- **Sitio público:** https://infocamiri.rf.gd
+- **Sitio público:** https://mmppppss.rf.gd
 - **Panel de administración:** `/panel/`
 
 ---

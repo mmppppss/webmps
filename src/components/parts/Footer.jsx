@@ -16,8 +16,10 @@ export default function Footer() {
 	return (
 		<footer className="footer">
 			<span>© {anio} </span>
-			{github && (
-				<a href={github} rel="noopener noreferrer">InfoCamiri</a>
+			{github ? (
+				<a href={github} rel="noopener noreferrer">{site.nombre}</a>
+			) : (
+				<span>{site.nombre}</span>
 			)}
 			<span>· contenido bajo </span>
 			<a

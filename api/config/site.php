@@ -57,21 +57,29 @@ final class Site
         return dirname(__DIR__, 2) . '/site.config.json';
     }
 
+    /**
+     * Respallo mínimo por si site.config.json falta o está roto.
+     *
+     * OJO: a propósito NO contiene nombre, título, URL ni icono. Antes
+     * decía "InfoCamiri" / infocamiri.rf.gd y, si la lectura fallaba, el
+     * SEO publicaba una marca fantasma en vez de avisar (el error_log de
+     * load() ya indica el problema). La identidad vive solo en el JSON.
+     */
     private static function defaults(): array
     {
         return [
-            'nombre'           => 'InfoCamiri',
-            'titulo'           => 'InfoCamiri',
-            'descripcion'      => 'Noticias locales de Camiri, Bolivia.',
-            'url'              => 'https://infocamiri.rf.gd',
+            'nombre'           => '',
+            'titulo'           => '',
+            'descripcion'      => '',
+            'url'              => '',
             'twitter'          => '',
-            'keywords'         => 'noticias',
-            'autor'            => 'InfoCamiri',
+            'keywords'         => '',
+            'autor'            => '',
             'idioma'           => 'es',
             'locale'           => 'es_BO',
-            'themeColor'       => '#4fc3f7',
-            'favicon'          => '/media/logomain.png',
-            'imagenPorDefecto' => '/media/logomain.png',
+            'themeColor'       => '',
+            'favicon'          => '',
+            'imagenPorDefecto' => '',
             'redes'            => [],
             'categorias'       => [],
         ];

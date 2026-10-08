@@ -10,8 +10,8 @@
 	"idioma": "es",
 	"locale": "es_BO",
 	"themeColor": "#4fc3f7",
-	"favicon": "/media/cookie1.webp",
-	"imagenPorDefecto": "/media/cookie1.webp",
+	"favicon": "/media/logo.webp",
+	"imagenPorDefecto": "/media/logo.webp",
 
 	"redes": {
 		"github": "https://github.com/mmppppss",

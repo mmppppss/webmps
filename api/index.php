@@ -45,8 +45,8 @@ $siteTitle   = Site::titulo();
 $siteUrl     = Site::url();
 $idioma      = Site::idioma();
 $locale      = (string) Site::get('locale', 'es_BO');
-$themeColor  = (string) Site::get('themeColor', '#4fc3f7');
-$favicon     = (string) Site::get('favicon', '/media/logomain.png');
+$themeColor  = (string) Site::get('themeColor', '');
+$favicon     = (string) Site::get('favicon', '');
 
 // ── Ruta solicitada ─────────────────────────────────────────────────────────
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
@@ -381,7 +381,9 @@ if ($es404) {
 	<meta name="robots" content="<?= $es404 ? 'noindex, follow' : 'index, follow, max-image-preview:large' ?>" />
 	<meta name="author" content="<?= $e($autor) ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<?php if ($themeColor !== ''): ?>
 	<meta name="theme-color" content="<?= $e($themeColor) ?>" />
+	<?php endif; ?>
 
 	<!-- Open Graph -->
 	<meta property="og:site_name" content="<?= $e($siteName) ?>" />
@@ -421,7 +423,9 @@ if ($es404) {
 
 	<meta name="keywords" content="<?= $e(Site::get('keywords')) ?>" />
 	<link rel="canonical" href="<?= $e($url) ?>" />
+	<?php if ($favicon !== ''): ?>
 	<link rel="icon" href="<?= $e($favicon) ?>" />
+	<?php endif; ?>
 	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
 	<?php if (!empty($grafoLd)): ?>

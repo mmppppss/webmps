@@ -1,0 +1,200 @@
+/* ============================================================================
+   TEMAS — ÚNICO ARCHIVO DE TEMA DEL SITIO
+   ----------------------------------------------------------------------------
+   Todo lo que es color, textura de fondo y superficie vive aquí. El resto de
+   hojas (index.css, md.css, panel.css, menu.css…) solo usan variables, sin
+   ni un hex suelto.
+
+   Para cambiar de tema:
+     1. Comenta el bloque :root de "Tema activo".
+     2. Descomenta el bloque :root del tema que quieras.
+   La sección "Base" NO se toca: es común a todos los temas (si no, al
+   cambiar de tema se perdían sombras, radios y tipografía).
+
+   Estructura:
+     1. Base común        → sombras, radios, tipografía, contenedor
+     2. Tema activo       → Gruvbox (colores + glass + textura de fondo)
+     3. Otros temas       → Latte, Catppuccin Mocha, Tokyo Night (comentados)
+     4. Fallback          → superficie sólida sin backdrop-filter
+   ============================================================================ */
+
+/* ── 1. Base común a todos los temas ─────────────────────────────────────── */
+:root {
+	/* Sombras */
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+	--shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+	--shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+	/* Para filter: drop-shadow() (menú), que no admite box-shadow */
+	--shadow-drop: 0 0 2px rgba(0, 0, 0, 0.35);
+
+	/* Radio */
+	--radius-sm: 6px;
+	--radius: 12px;
+	--radius-lg: 20px;
+
+	/* Espaciado / tipografía fluida */
+	--container: 900px;
+	--fs-h1: clamp(1.6rem, 4vw, 2.5rem);
+	--fs-h2: clamp(1.25rem, 3vw, 1.75em);
+	--fs-body: 1.02rem;
+
+	font-family: "Computer Modern Typewriter", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: var(--fs-body);
+	line-height: 1.65;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 2. Tema activo: Gruvbox ─────────────────────────────────────────────── */
+:root {
+	/* Fondos */
+	--bg: #1d2021;
+	--bg-elevated: #282828;
+	--bg-soft: #32302f;
+	--bg-deeper: #3c3836;
+
+	/* Texto */
+	--fg: #ebdbb2;
+	--fg-muted: #d5c4a1;
+	--fg-strong: #f9f5d7;
+
+	/* Acentos */
+	--accent: #fabd2f;
+	--accent-2: #fe8019;
+	--accent-cool: #83a598;
+	--destructive: #fb4934;
+
+	/* Bordes / focus */
+	--border: rgba(213, 196, 161, 0.14);
+	--border-strong: rgba(213, 196, 161, 0.28);
+	--ring: #fabd2f;
+
+	/* Glassmorphism
+	   Los fondos son deliberadamente poco opacos (0.40 / 0.55): el color de
+	   detrás tiene que intuirse a través del panel para que se lea como
+	   cristal y no como una caja. Si el soporte de backdrop-filter falta,
+	   la hoja cae a superficie sólida (ver sección 4). */
+	--glass-bg: rgba(50, 48, 47, 0.40);
+	--glass-bg-strong: rgba(48, 45, 43, 0.55);
+	--glass-border: rgba(235, 219, 178, 0.14);
+	--glass-blur: 18px;
+
+	/* Textura del fondo (manchas). La usa body { background-image } de
+	   index.css. Son los propios colores gruvbox con alphas bajos: fondo
+	   oscuro con matices, no uno iluminado. Repartidas de forma irregular
+	   (tamaños y posiciones distintas, sin simetría de esquinas). */
+	--bg-texture:
+		radial-gradient(26rem 26rem at 14% 18%, rgba(250, 189, 47, 0.07), transparent 65%),
+		radial-gradient(34rem 34rem at 82% 8%, rgba(254, 128, 25, 0.05), transparent 62%),
+		radial-gradient(30rem 30rem at 44% 52%, rgba(131, 165, 152, 0.05), transparent 68%),
+		radial-gradient(22rem 22rem at 92% 62%, rgba(211, 134, 155, 0.04), transparent 65%),
+		radial-gradient(38rem 38rem at 6% 78%, rgba(184, 187, 38, 0.04), transparent 66%),
+		radial-gradient(18rem 18rem at 66% 88%, rgba(250, 189, 47, 0.04), transparent 60%),
+		radial-gradient(24rem 24rem at 30% 34%, rgba(131, 165, 152, 0.03), transparent 70%),
+		radial-gradient(28rem 28rem at 72% 38%, rgba(254, 128, 25, 0.04), transparent 64%);
+}
+
+/* ── 3. Otros temas (comentar/descomentar) ────────────────────────────────
+
+:root {
+	--bg: #f9f5d7;
+	--bg-elevated: #f2e5bc;
+	--bg-soft: #ebdbb2;
+	--bg-deeper: #d5c4a1;
+	--fg: #3c3836;
+	--fg-muted: #504945;
+	--fg-strong: #282828;
+	--accent: #b57614;
+	--accent-2: #af3a03;
+	--accent-cool: #076678;
+	--destructive: #9d0006;
+	--border: rgba(60, 56, 54, 0.12);
+	--border-strong: rgba(60, 56, 54, 0.25);
+	--ring: #b57614;
+	--glass-bg: rgba(242, 229, 188, 0.6);
+	--glass-bg-strong: rgba(235, 219, 178, 0.75);
+	--glass-border: rgba(60, 56, 54, 0.12);
+	--glass-blur: 12px;
+	--bg-texture:
+		radial-gradient(26rem 26rem at 14% 18%, rgba(181, 118, 20, 0.10), transparent 65%),
+		radial-gradient(34rem 34rem at 82% 8%, rgba(175, 58, 3, 0.07), transparent 62%),
+		radial-gradient(30rem 30rem at 44% 52%, rgba(7, 102, 120, 0.07), transparent 68%),
+		radial-gradient(22rem 22rem at 92% 62%, rgba(157, 0, 6, 0.05), transparent 65%),
+		radial-gradient(38rem 38rem at 6% 78%, rgba(60, 56, 54, 0.05), transparent 66%),
+		radial-gradient(18rem 18rem at 66% 88%, rgba(181, 118, 20, 0.06), transparent 60%);
+}
+
+:root {
+	--bg: #1e1e2e;
+	--bg-elevated: #181825;
+	--bg-soft: #313244;
+	--bg-deeper: #45475a;
+	--fg: #cdd6f4;
+	--fg-muted: #a6adc8;
+	--fg-strong: #f5e0dc;
+	--accent: #f9e2af;
+	--accent-2: #fab387;
+	--accent-cool: #89b4fa;
+	--destructive: #f38ba8;
+	--border: rgba(205, 214, 244, 0.12);
+	--border-strong: rgba(205, 214, 244, 0.25);
+	--ring: #f9e2af;
+	--glass-bg: rgba(49, 50, 68, 0.55);
+	--glass-bg-strong: rgba(69, 71, 90, 0.7);
+	--glass-border: rgba(205, 214, 244, 0.1);
+	--glass-blur: 14px;
+	--bg-texture:
+		radial-gradient(26rem 26rem at 14% 18%, rgba(249, 226, 175, 0.07), transparent 65%),
+		radial-gradient(34rem 34rem at 82% 8%, rgba(250, 179, 135, 0.06), transparent 62%),
+		radial-gradient(30rem 30rem at 44% 52%, rgba(137, 180, 250, 0.06), transparent 68%),
+		radial-gradient(22rem 22rem at 92% 62%, rgba(243, 139, 168, 0.05), transparent 65%),
+		radial-gradient(38rem 38rem at 6% 78%, rgba(166, 227, 161, 0.04), transparent 66%),
+		radial-gradient(18rem 18rem at 66% 88%, rgba(249, 226, 175, 0.05), transparent 60%);
+}
+
+:root {
+	--bg: #1a1b26;
+	--bg-elevated: #16161e;
+	--bg-soft: #24283b;
+	--bg-deeper: #414868;
+	--fg: #c0caf5;
+	--fg-muted: #9aa5ce;
+	--fg-strong: #f2f5ff;
+	--accent: #e0af68;
+	--accent-2: #ff9e64;
+	--accent-cool: #7aa2f7;
+	--destructive: #f7768e;
+	--border: rgba(192, 202, 245, 0.12);
+	--border-strong: rgba(192, 202, 245, 0.25);
+	--ring: #e0af68;
+	--glass-bg: rgba(36, 40, 59, 0.55);
+	--glass-bg-strong: rgba(65, 72, 104, 0.7);
+	--glass-border: rgba(192, 202, 245, 0.1);
+	--glass-blur: 14px;
+	--bg-texture:
+		radial-gradient(26rem 26rem at 14% 18%, rgba(224, 175, 104, 0.07), transparent 65%),
+		radial-gradient(34rem 34rem at 82% 8%, rgba(255, 158, 100, 0.06), transparent 62%),
+		radial-gradient(30rem 30rem at 44% 52%, rgba(122, 162, 247, 0.06), transparent 68%),
+		radial-gradient(22rem 22rem at 92% 62%, rgba(247, 118, 142, 0.05), transparent 65%),
+		radial-gradient(38rem 38rem at 6% 78%, rgba(192, 202, 245, 0.04), transparent 66%),
+		radial-gradient(18rem 18rem at 66% 88%, rgba(224, 175, 104, 0.05), transparent 60%);
+}
+
+*/
+
+/* ── 4. Fallback sin backdrop-filter ───────────────────────────────────────
+   Si el navegador no soporta backdrop-filter, caer a superficie sólida.
+   Se reescriben las variables: así todos los componentes que las usan
+   (menú, panel, tarjetas, comentarios) se vuelven opacos de una vez, en
+   vez de quedarse translúcidos sin poder difuminar nada. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	:root {
+		--glass-bg: var(--bg-elevated);
+		--glass-bg-strong: var(--bg-elevated);
+		--glass-blur: 0px;
+	}
+
+	.glass {
+		background: var(--bg-elevated);
+	}
+}

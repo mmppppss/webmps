@@ -1,16 +1,9 @@
 .markdown-body {
-	/* Superficie más opaca que el resto del glass: es texto largo y hay que
-	   poder leerlo aunque detrás haya una mancha de color. */
-	background: var(--glass-bg-strong);
-	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
-	border: 1px solid var(--glass-border);
-	border-radius: var(--radius);
+	/* Sin tarjeta contenedora: el texto va sobre el fondo directamente.
+	   Solo se conserva la tipografía (interlineado, tamaño, color). */
 	color: var(--fg);
 	line-height: 1.7;
-	padding: 22px;
 	font-size: 1.05em;
-	box-shadow: var(--shadow-sm);
 }
 
 .markdown-body a {

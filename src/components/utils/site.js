@@ -26,7 +26,7 @@ export function urlAbsoluta(ruta) {
 	return `${site.url}/${String(ruta).replace(/^\/+/, '')}`;
 }
 
-/** Título completo de una página: "Artículo | InfoCamiri". */
+/** Título completo de una página: "Artículo | mmppppss". */
 export function tituloPagina(titulo) {
 	if (!titulo) return site.titulo;
 	return `${titulo} | ${site.nombre}`;
